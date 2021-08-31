@@ -5,7 +5,11 @@ import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
 import { FetchedUserResponse } from '../dto/AuthData';
 
-export const me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const me = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const data = await UserService.findUserById(req.userId);
     if (data) {

@@ -3,13 +3,18 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "arridhaamrad",
-  "email": "arridhaamrad@gmail.com",
+  "username": "vbbvnb",
+  "email": "vbnbvbb@vc.com",
   "password": "123456"
 }
 
 ### Email confirmation ✅
-PUT http://localhost:5000/api/auth/verify-email/CxGg27vn8H+VEid+1aNWx7U5tarfctOJFCvm7qKZPLel7oby_z69IKgrkJZ7l_1rpW_+DAQQ4VbIF9mWPGLb26U+qaade9hocqbkTDq6KYy0E_JUZ12oq+FIDDl9DkfAd+bg_ulO_9vm5RqtnHo4Up1LHnOMKbjS1bD5Mr_OQW8pAaVGL0NRQ33iLKjM8YH3yvDVPRRtdn_zX6Y+yjq8xA8zlGyfSUlAmvvRkIeyYSDYaFgU8CHJ9dgMOfMYT9zjkq6QsgZ7CX8LJlMhe73Uj5XF4wL57B63PEPVhiyEXohS_m7WB7_d7jSSQf4UbgMfQv6Y6hLZP+bu6pgyJ30+izqZV9i_h1vzsumPHM5GxKM8QnJ+MVr+Oji5kzgc3_B9zZLAEofgeKiB0QiyjAdAsu73EpAfqqSSbMV40qjOeWLPZVoTjXkrU8fdEfuWXlUU7V9BpvxCXijki01w+Utt_av0vSVNwx94aYJ5ThjLx2SoQjM1bChhzA_RZYalqb+oIAhGuKmj26G26Rj99lLh_zxx+qNruEsqSLycN_LoCRHdd_j1WsGe0e_UrMPC+SofX9zLQPxyLvfpyCEjw_WOA5gQID7xXXQHwKx8AqO1h1TQtU4W26GpqB4PRulgZftDc0bBIwInP7gcZO1TgQ2bTpTxnImaHpyoCvg67+v3R98a81bUsqc1erP89PYLtVoNmOYgeXggnqcfRYT4ycihOwPZxIW0azG8SQOoeDve_sDKbfXedO6tjGw80HhOqqmDQmI_gCgkIt7FQPdXPaQ4N+SbWwsyDBSvFU2wVbKsYeqNkgu6LHsIMtvBOvdmCXy2_QRGgEVQgIeyAvN6mG3EYhAz2AMQvqlpa4N_e7UxPEQAR5rlbKgL9eyMf8Q_38WtoErrewQtoyjTRPoYGfrFioDrO0D9rYPsWhBYu8YDNuu849xfpvqY1Oy7z_9NAfzUozQe8JtFumLYui0GPOi5s6tgylHaNLRYdEKBLVrXOLmlWP0hXaSJEoWOqcDgzjLScwFZs1ivZclgPzIsLa3l6lXYHEO8skz+7a29pWFgf+wvRK3Kpss1u_qm7jBY+0J4MYIxlrEDbjVL1O4HVxsFBw3qPMsVbMpv8DSvQiM3TbI0SsMuYDbFKuYVcb1aehoAuC96fMn2drEK3Zsi1kJGrxFHKH766TA3Lsl6tHMkhIA=
+PUT http://localhost:5000/api/auth/verify-email
+Content-Type: application/json
+
+{
+  "verificationCode": "009490"
+}
 
 
 ### Login

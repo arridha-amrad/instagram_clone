@@ -8,8 +8,9 @@ import {
 import { HTTP_CODE } from '../enums/HTTP_CODE';
 import Exception from '../exceptions/Exception';
 import * as fs from 'fs';
-import { IUserModel } from '../interfacesAndTypes/UserInterfaces';
+
 import { decrypt } from '../utils/Encrypt';
+import { IUserModel } from '../models/UserModel';
 
 const publicKey = fs.readFileSync('keys/public.pem', 'utf-8');
 const privateKey = fs.readFileSync('keys/private.pem', 'utf-8');
@@ -30,7 +31,9 @@ const verifyOptions: jwt.VerifyOptions = {
   subject: 'authentication',
 };
 
-export const createEmailLinkToken = (email: string): Promise<string | undefined> => {
+export const createEmailLinkToken = (
+  email: string,
+): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
     if (!email) {
       reject('createEmailLinkToken error : email not provided');
@@ -75,14 +78,16 @@ const accessTokenVerifyOptions: jwt.VerifyOptions = {
   subject: 'authentication',
 };
 
-export const signAccessToken = (user: IUserModel): Promise<string | undefined> => {
+export const signAccessToken = (
+  user: IUserModel,
+): Promise<string | undefined> => {
   // console.log('public key : ', publicKey);
   return new Promise((resolve, reject) => {
-    if (!user.id) {
+    if (!user._id) {
       reject('signAccessToken error : userId not provided');
     }
     jwt.sign(
-      { userId: user.id, role: user.role },
+      { userId: user._id, role: user.role },
       privateKey,
       accessTokenSignOptions,
       (err, token) => {
@@ -96,15 +101,23 @@ export const signAccessToken = (user: IUserModel): Promise<string | undefined> =
 };
 
 // eslint-disable-next-line
-export function verifyAccessToken(req: Request, res: Response, next: NextFunction): void {
+export function verifyAccessToken(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const encryptedToken = req.cookies.LOGIN_COOKIE;
   if (!encryptedToken) {
-    return next(new Exception(HTTP_CODE.UNAUTHORIZED, 'You are not authorized'));
+    return next(
+      new Exception(HTTP_CODE.UNAUTHORIZED, 'You are not authorized'),
+    );
   }
   const token = decrypt(encryptedToken).split(' ')[1];
   if (!token) {
     console.log('verifyAccessToken error : Token not provided');
-    return next(new Exception(HTTP_CODE.METHOD_NOT_ALLOWED, 'You are not authorized'));
+    return next(
+      new Exception(HTTP_CODE.METHOD_NOT_ALLOWED, 'You are not authorized'),
+    );
   }
   jwt.verify(token, publicKey, accessTokenVerifyOptions, (err, payload) => {
     if (err) {
@@ -132,7 +145,9 @@ const refreshTokenVerifyOptions: jwt.VerifyOptions = {
   audience: 'node-authentication-audience',
   subject: 'authentication',
 };
-export const signRefreshToken = (user: IUserModel): Promise<string | undefined> => {
+export const signRefreshToken = (
+  user: IUserModel,
+): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
     if (!user) {
       reject('signRefreshToken error : userId not provided');
@@ -141,7 +156,7 @@ export const signRefreshToken = (user: IUserModel): Promise<string | undefined> 
       reject('signRefreshToken error : jwtVersion not provided');
     }
     jwt.sign(
-      { userId: user.id, jwtVersion: user.jwtVersion },
+      { userId: user._id, jwtVersion: user.jwtVersion },
       privateKey,
       refreshTokenSignOptions,
       (err, token) => {
@@ -162,11 +177,16 @@ export const verifyRefreshToken = (
     if (!oldRefreshToken) {
       reject('verifyRefreshToken error : old refresh token not provided');
     }
-    jwt.verify(oldRefreshToken, publicKey, refreshTokenVerifyOptions, (err, payload) => {
-      if (err) {
-        reject(`verifyRefreshToken error : ${err.message}`);
-      }
-      resolve(payload as RefreshTokenPayloadType);
-    });
+    jwt.verify(
+      oldRefreshToken,
+      publicKey,
+      refreshTokenVerifyOptions,
+      (err, payload) => {
+        if (err) {
+          reject(`verifyRefreshToken error : ${err.message}`);
+        }
+        resolve(payload as RefreshTokenPayloadType);
+      },
+    );
   });
 };

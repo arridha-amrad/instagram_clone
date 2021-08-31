@@ -21,7 +21,7 @@ import FacebookButton from "../../components/auth/FacebookButton";
 import AuthInput from "../../components/auth/input/AuthInput";
 import AppPlayStore from "../../components/auth/getApp/AppPlayStore";
 
-interface LoginProps { }
+interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const [state, setState] = useState({

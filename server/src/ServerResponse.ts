@@ -15,20 +15,19 @@ export const responseWithCookie = (
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     })
-    .cookie(process.env.COOKIE_ID, user.id, {
+    .cookie(process.env.COOKIE_ID, user._id, {
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 5,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     })
-    .json({
-      data: {
-        ...user,
-      },
-    });
+    .send({ ...user });
 };
 
-export const responseWithCookieOnly = (res: Response, encryptedAccessToken: string): void => {
+export const responseWithCookieOnly = (
+  res: Response,
+  encryptedAccessToken: string,
+): void => {
   res
     .status(200)
     .cookie(process.env.COOKIE_NAME, encryptedAccessToken, {
@@ -40,23 +39,10 @@ export const responseWithCookieOnly = (res: Response, encryptedAccessToken: stri
     .send('cookie renew');
 };
 
-// export const responseFailure = <T>(res: Response, status: HTTP_CODE, errors: T): void => {
-//   res.status(status).json({
-//     errors: errors,
-//     success: null,
-//   });
-// };
-
-export const responseSuccess = <T>(res: Response, status: HTTP_CODE, data: T): void => {
-  res.status(status).json({
-    data,
-  });
+export const responseSuccess = <T>(
+  res: Response,
+  status: HTTP_CODE,
+  data: T,
+): void => {
+  res.status(status).send(data);
 };
-
-// export const serverError = (res: Response): void => {
-//   res.status(500).json({
-//     error: {
-//       generic: 'Something went wrong',
-//     },
-//   });
-// };

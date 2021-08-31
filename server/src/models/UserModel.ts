@@ -1,8 +1,30 @@
-import mongoose, { Model } from 'mongoose';
-import { IUserModel } from '../interfacesAndTypes/UserInterfaces';
+import mongoose, { Model, Schema } from 'mongoose';
 import argon2 from 'argon2';
+import { AuthenticationStrategy, RequiredAuthAction } from '../enums/UserEnum';
 
-const UserSchema = new mongoose.Schema<IUserModel, Model<IUserModel>, IUserModel>(
+export interface IUserModel {
+  _id: Schema.Types.ObjectId;
+  username: string;
+  strategy: AuthenticationStrategy;
+  email: string;
+  password: string;
+  requiredAuthAction: RequiredAuthAction;
+  jwtVersion: string;
+  role: string;
+  // optional
+  isActive?: boolean;
+  isLogin?: boolean;
+  isVerified?: boolean;
+  // setup by mongoDB
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const UserSchema = new mongoose.Schema<
+  IUserModel,
+  Model<IUserModel>,
+  IUserModel
+>(
   {
     username: {
       type: String,

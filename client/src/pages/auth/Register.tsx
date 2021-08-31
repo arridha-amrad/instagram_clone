@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   AuthContainer,
   AuthForm,
@@ -20,22 +20,26 @@ import MyAuthCarousel from "../../components/auth/carousel/AuthCarousel";
 import FacebookButton from "../../components/auth/FacebookButton";
 import AuthInput from "../../components/auth/input/AuthInput";
 import AppPlayStore from "../../components/auth/getApp/AppPlayStore";
+import UseFormAuth from "../../utils/UseFormAuth";
+import { register } from "../../redux/reduxActions/AuthActions";
+import { RegisterData } from "../../dto/AuthDTO";
+import { RegisterValidator } from "../../validators/AuthValidator";
 
-interface SignupProps { }
+interface RegisterProps {}
 
-const Signup: React.FC<SignupProps> = () => {
-  const [state, setState] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+const Register: React.FC<RegisterProps> = () => {
+  const { errors, handleChange, handleSubmit, loadingAuth, states } =
+    UseFormAuth<RegisterData>(
+      register,
+      {
+        email: "",
+        password: "",
+        username: "",
+      },
+      RegisterValidator
+    );
 
-  const handleChange = (e: any) => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const { email, password, username } = states;
 
   return (
     <Outer>
@@ -53,7 +57,7 @@ const Signup: React.FC<SignupProps> = () => {
                 <AuthInput
                   label="username"
                   name="username"
-                  value={state.username}
+                  value={username}
                   handleChange={handleChange}
                   type="text"
                 />
@@ -61,7 +65,7 @@ const Signup: React.FC<SignupProps> = () => {
                 <AuthInput
                   label="email"
                   name="email"
-                  value={state.email}
+                  value={email}
                   handleChange={handleChange}
                   type="text"
                 />
@@ -69,7 +73,7 @@ const Signup: React.FC<SignupProps> = () => {
                 <AuthInput
                   label="password"
                   name="password"
-                  value={state.password}
+                  value={password}
                   handleChange={handleChange}
                   type="password"
                 />
@@ -100,4 +104,4 @@ const Signup: React.FC<SignupProps> = () => {
   );
 };
 
-export default Signup;
+export default Register;

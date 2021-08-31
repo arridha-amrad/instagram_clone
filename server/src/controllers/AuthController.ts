@@ -3,15 +3,22 @@ import { AuthenticationStrategy, RequiredAuthAction } from '../enums/UserEnum';
 import { v4 } from 'uuid';
 import argon2 from 'argon2';
 import sendEmail from '../services/MailService';
-import { emailConfirmation, resetPasswordRequest } from '../templates/MailTemplates';
+import {
+  emailConfirmation,
+  resetPasswordRequest,
+  VerificationEmailContent,
+} from '../templates/MailTemplates';
 import * as JwtService from '../services/JwtService';
 import * as msg from '../templates/NotificationTemplates';
-import { responseSuccess, responseWithCookie, responseWithCookieOnly } from '../ServerResponse';
+import {
+  responseSuccess,
+  responseWithCookie,
+  responseWithCookieOnly,
+} from '../ServerResponse';
 import { HTTP_CODE } from '../enums/HTTP_CODE';
 import * as Validator from '../validators/AuthValidator';
 // import { OAuth2Client, TokenPayload } from 'google-auth-library';
-// import { IUser } from '../model/user/IUser';
-import * as UserService from '../services/UserService';
+import * as UserServices from '../services/UserService';
 import { BadRequestException } from '../exceptions/BadRequestException';
 import Exception from '../exceptions/Exception';
 import ServerErrorException from '../exceptions/ServerErrorException';
@@ -20,19 +27,9 @@ import * as redis from '../database/redisClient';
 
 import { decrypt, encrypt } from '../utils/Encrypt';
 import { LoginRequest, RegisterRequest } from '../dto/AuthData';
-
-export const checkIsAuthenticated = async (req: Request, res: Response): Promise<void> => {
-  const cookieId = req.cookies.COOKIE_ID;
-  const LOGIN_COOKIE = req.cookies.LOGIN_COOKIE;
-  if (cookieId && LOGIN_COOKIE) {
-    const user = await UserService.findUserById(cookieId);
-    if (user?.isLogin) {
-      res.send('login');
-    }
-  } else {
-    res.send('not login');
-  }
-};
+import { generateNumber } from '../utils/RandomNumberGenerator';
+import * as VerificationServices from '../services/VerificationService';
+import { IVerificationModel } from '../models/VerificationModel';
 
 export const registerHandler = async (
   req: Request,
@@ -47,25 +44,56 @@ export const registerHandler = async (
   });
   if (!valid) next(new BadRequestException(errors));
   try {
-    const savedUser = await UserService.save({
+    const savedUser = await UserServices.save({
       ...req.body,
       strategy: AuthenticationStrategy.default,
       requiredAuthAction: RequiredAuthAction.emailVerification,
     });
-    const tokenLink = await JwtService.createEmailLinkToken(savedUser.email);
-    if (tokenLink) {
-      // encryptedTokenLink may produce with '/', which affect our routes
-      const encryptedTokenLink = encrypt(tokenLink).replaceAll('/', '_');
-      await sendEmail(savedUser.email, emailConfirmation(savedUser.username, encryptedTokenLink));
-    }
-    return responseSuccess(res, HTTP_CODE.CREATED, msg.registerSuccess(savedUser.email));
+
+    // Create a unique verification code
+    // if the code already exists, looping run -> generate new code & check if it is exists
+    let verificationCode: string;
+    let isLoop = true;
+    do {
+      verificationCode = generateNumber(6);
+      const isCodeExists = await VerificationServices.findCodeAndNotComplete(
+        verificationCode,
+      );
+      if (isCodeExists) {
+        isLoop = true;
+      } else {
+        isLoop = false;
+      }
+    } while (isLoop);
+
+    const verificationData: IVerificationModel = {
+      code: verificationCode,
+      email,
+      user: savedUser._id,
+    };
+    await VerificationServices.save(verificationData);
+    const emailContent: VerificationEmailContent = {
+      username,
+      email,
+      code: verificationCode,
+    };
+    await sendEmail(savedUser.email, emailConfirmation(emailContent));
+    return responseSuccess(
+      res,
+      HTTP_CODE.CREATED,
+      msg.registerSuccess(savedUser.email),
+    );
   } catch (err) {
     console.error(err);
     if (err.keyPattern.email === 1) {
-      return next(new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(email)));
+      return next(
+        new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(email)),
+      );
     }
     if (err.keyPattern.username === 1) {
-      return next(new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(username)));
+      return next(
+        new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(username)),
+      );
     }
     return next(new ServerErrorException());
   }
@@ -76,32 +104,27 @@ export const emailVerificationHandler = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { token } = req.params;
+  const { verificationCode } = req.body;
   try {
-    const replacedToken = token.replaceAll('_', '/');
-    const decryptedTokenLink = decrypt(replacedToken);
-    const payload = await JwtService.verifyTokenLink(decryptedTokenLink);
-    const user = await UserService.findUserByUsernameOrEmail(payload.email);
-    // const user = await User.findOne({ email }).select('+requiredAuthAction');
-    if (user) {
-      if (user.requiredAuthAction !== RequiredAuthAction.emailVerification) {
-        return next(new Exception(HTTP_CODE.BAD_REQUEST, 'wrong action'));
-      }
-      if (user.isVerified) {
-        return next(new Exception(HTTP_CODE.BAD_REQUEST, 'Account already verified'));
-      }
-      if (!user.isVerified) {
-        await UserService.findUserByIdAndUpdate(user.id, {
-          isVerified: true,
-          requiredAuthAction: RequiredAuthAction.null,
-          isActive: true,
-          jwtVersion: v4(),
-        });
-        return responseSuccess(res, HTTP_CODE.OK, msg.emailVerified(user.username));
+    const verification = await VerificationServices.findCodeAndUpdate(
+      verificationCode,
+    );
+    if (verification) {
+      const user = await UserServices.findUserByIdAndUpdate(verification.user, {
+        isVerified: true,
+        isActive: true,
+        requiredAuthAction: RequiredAuthAction.null,
+      });
+      if (user) {
+        return responseSuccess(
+          res,
+          HTTP_CODE.OK,
+          msg.emailVerified(user.username),
+        );
       }
     }
   } catch (err) {
-    console.log('confirmEmail errors : ', err);
+    console.log('email verification errors : ', err);
     return next(new ServerErrorException());
   }
 };
@@ -120,7 +143,7 @@ export const loginHandler = async (
     return next(new BadRequestException(errors));
   }
   try {
-    const user = await UserService.findUserByUsernameOrEmail(identity);
+    const user = await UserServices.findUserByUsernameOrEmail(identity);
     if (!user) {
       return next(new Exception(HTTP_CODE.NOT_FOUND, 'user not found'));
     }
@@ -131,14 +154,14 @@ export const loginHandler = async (
     if (!isMatch) {
       return next(new Exception(HTTP_CODE.FORBIDDEN, msg.invalidPassword));
     }
-    await UserService.findUserByIdAndUpdate(user.id, { isLogin: true });
+    await UserServices.findUserByIdAndUpdate(user._id, { isLogin: true });
     const accessToken = await JwtService.signAccessToken(user);
     const refreshToken = await JwtService.signRefreshToken(user);
     if (accessToken && refreshToken) {
       const encryptedAccessToken = encrypt(accessToken);
       const encryptedRefreshToken = encrypt(refreshToken);
       // store refreshToken to redis
-      await redis.set(`${user.id}_refToken`, encryptedRefreshToken);
+      await redis.set(`${user._id}_refToken`, encryptedRefreshToken);
       return responseWithCookie(res, encryptedAccessToken, user);
     }
   } catch (err) {
@@ -157,7 +180,7 @@ export const logoutHandler = async (
     const userId = req.cookies.COOKIE_ID;
     if (userId) {
       // update user credential
-      await UserService.findUserByIdAndUpdate(req.userId, {
+      await UserServices.findUserByIdAndUpdate(req.userId, {
         isLogin: false,
       });
       await redis.del(`${userId}_refToken`);
@@ -183,10 +206,12 @@ export const refreshTokenHandler = async (
     const bearerRefreshToken = decrypt(encryptedRefreshToken ?? '');
     const token = bearerRefreshToken.split(' ')[1];
     const payload = await JwtService.verifyRefreshToken(token);
-    const user = await UserService.findUserById(payload?.userId ?? '');
+    const user = await UserServices.findUserById(payload?.userId ?? '');
     if (user) {
       if (user.jwtVersion !== payload?.jwtVersion ?? '') {
-        return next(new Exception(HTTP_CODE.METHOD_NOT_ALLOWED, 'expired jwt version'));
+        return next(
+          new Exception(HTTP_CODE.METHOD_NOT_ALLOWED, 'expired jwt version'),
+        );
       }
       const newAccessToken = await JwtService.signAccessToken(user);
       const newRefreshToken = await JwtService.signRefreshToken(user);
@@ -215,7 +240,7 @@ export const forgotPasswordHandler = async (
     return next(new BadRequestException(errors));
   }
   try {
-    const user = await UserService.findUserByUsernameOrEmail(email);
+    const user = await UserServices.findUserByUsernameOrEmail(email);
     if (!user) {
       return next(new Exception(HTTP_CODE.NOT_FOUND, msg.userNotFound));
     }
@@ -223,7 +248,7 @@ export const forgotPasswordHandler = async (
       return next(new Exception(HTTP_CODE.FORBIDDEN, msg.emailNotVerified));
     }
     // update user credentials
-    const updated = await UserService.findUserByIdAndUpdate(user.id, {
+    const updated = await UserServices.findUserByIdAndUpdate(user._id, {
       isLogin: false,
       requiredAuthAction: RequiredAuthAction.resetPassword,
     });
@@ -231,7 +256,10 @@ export const forgotPasswordHandler = async (
       const token = await JwtService.createEmailLinkToken(email);
       if (token) {
         const encryptedToken = encrypt(token).replaceAll('/', '_');
-        await sendEmail(email, resetPasswordRequest(user.username, encryptedToken));
+        await sendEmail(
+          email,
+          resetPasswordRequest(user.username, encryptedToken),
+        );
         return responseSuccess(res, HTTP_CODE.OK, msg.forgotPassword(email));
       }
     }
@@ -255,13 +283,13 @@ export const resetPasswordHandler = async (
   try {
     const token = decrypt(encryptedLinkToken.replaceAll('_', '/'));
     const payload = await JwtService.verifyTokenLink(token);
-    const user = await UserService.findUserByUsernameOrEmail(payload.email);
+    const user = await UserServices.findUserByUsernameOrEmail(payload.email);
     if (user) {
       if (user.requiredAuthAction !== RequiredAuthAction.resetPassword) {
         return next(new Exception(HTTP_CODE.BAD_REQUEST, 'Action not granted'));
       }
       // update user's jwtVersion, password, requiredAuthAction
-      await UserService.findUserByIdAndUpdate(user.id, {
+      await UserServices.findUserByIdAndUpdate(user._id, {
         jwtVersion: v4(),
         requiredAuthAction: RequiredAuthAction.null,
         password: await argon2.hash(password),
