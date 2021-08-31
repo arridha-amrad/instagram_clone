@@ -29,7 +29,7 @@ export const logout = () => async (dispatch: Dispatch<AuthActionsType>) => {
     await axiosInstance.post("/auth/logout");
     localStorage.removeItem("data");
     dispatch({ type: "LOGOUT" });
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
   }
 };
@@ -60,8 +60,8 @@ export const register =
       dispatch({
         type: "AUTH_SUCCESS",
       });
-      dispatchMessage(dispatch, res.data.data, "success");
-    } catch (err) {
+      dispatchMessage(dispatch, res.data, "success");
+    } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",
       });
@@ -79,7 +79,7 @@ export const forgotPassword =
         type: "AUTH_SUCCESS",
       });
       dispatchMessage(dispatch, res.data.data, "success");
-    } catch (err) {
+    } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",
       });
@@ -100,7 +100,7 @@ export const resetPassword =
         type: "AUTH_SUCCESS",
       });
       dispatchMessage(dispatch, res.data.data, "success");
-    } catch (err) {
+    } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",
       });

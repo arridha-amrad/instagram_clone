@@ -83,7 +83,8 @@ export const registerHandler = async (
       HTTP_CODE.CREATED,
       msg.registerSuccess(savedUser.email),
     );
-  } catch (err) {
+    // eslint-disable-next-line
+  } catch (err: any) {
     console.error(err);
     if (err.keyPattern.email === 1) {
       return next(

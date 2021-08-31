@@ -7,7 +7,7 @@ export const meQuery = () => async (dispatch: Dispatch<any>) => {
   try {
     const res = await axiosInstance.get("/user/me");
     localStorage.setItem("user", res.data.success.username);
-  } catch (err) {
+  } catch (err: any) {
     console.log(err.response);
   } finally {
     dispatch({ type: STOP_LOADING });

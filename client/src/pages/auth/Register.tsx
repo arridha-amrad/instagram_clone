@@ -24,11 +24,14 @@ import UseFormAuth from "../../utils/UseFormAuth";
 import { register } from "../../redux/reduxActions/AuthActions";
 import { RegisterData } from "../../dto/AuthDTO";
 import { RegisterValidator } from "../../validators/AuthValidator";
+import MyAlert from "../../components/alert/MyAlert";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
 
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = () => {
-  const { errors, handleChange, handleSubmit, loadingAuth, states } =
+  const { handleChange, handleSubmit, loadingAuth, states } =
     UseFormAuth<RegisterData>(
       register,
       {
@@ -40,6 +43,7 @@ const Register: React.FC<RegisterProps> = () => {
     );
 
   const { email, password, username } = states;
+  const { messages } = useSelector((state: RootState) => state.message);
 
   return (
     <Outer>
@@ -53,34 +57,54 @@ const Register: React.FC<RegisterProps> = () => {
                 <AuthTitle>
                   <img src={InstagramText} alt="instagram" />
                 </AuthTitle>
+
+                {messages.map((message) => (
+                  <MyAlert
+                    key={message.id}
+                    message={message.text}
+                    type={message.type}
+                  />
+                ))}
+
                 <VSpacer aa_length="20px" />
-                <AuthInput
-                  label="username"
-                  name="username"
-                  value={username}
-                  handleChange={handleChange}
-                  type="text"
-                />
-                <VSpacer aa_length="8px" />
-                <AuthInput
-                  label="email"
-                  name="email"
-                  value={email}
-                  handleChange={handleChange}
-                  type="text"
-                />
-                <VSpacer aa_length="8px" />
-                <AuthInput
-                  label="password"
-                  name="password"
-                  value={password}
-                  handleChange={handleChange}
-                  type="password"
-                />
-                <VSpacer aa_length="15px" />
-                <Button disabled type="submit" aa_isFullWidth>
-                  Sign up
-                </Button>
+                <form onSubmit={handleSubmit}>
+                  <AuthInput
+                    label="username"
+                    name="username"
+                    value={username}
+                    handleChange={handleChange}
+                    type="text"
+                  />
+                  <VSpacer aa_length="8px" />
+                  <AuthInput
+                    label="email"
+                    name="email"
+                    value={email}
+                    handleChange={handleChange}
+                    type="text"
+                  />
+                  <VSpacer aa_length="8px" />
+                  <AuthInput
+                    label="password"
+                    name="password"
+                    value={password}
+                    handleChange={handleChange}
+                    type="password"
+                  />
+                  <VSpacer aa_length="15px" />
+                  <Button
+                    disabled={
+                      username === "" ||
+                      email === "" ||
+                      password === "" ||
+                      loadingAuth
+                    }
+                    type="submit"
+                    aa_isFullWidth
+                  >
+                    {loadingAuth ? "loading..." : "Sign Up"}
+                  </Button>
+                </form>
                 <VSpacer aa_length="20px" />
                 <AuthOrText>
                   <OrText>OR</OrText>

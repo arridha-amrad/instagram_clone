@@ -27,7 +27,7 @@ export const setMessage =
         type: "CLEAR_MESSAGE",
         payload: id,
       });
-    }, 5000);
+    }, 8000);
   };
 
 export interface IMessage {
