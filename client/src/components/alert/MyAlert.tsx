@@ -8,11 +8,7 @@ interface MyAlertProps {
 }
 
 const MyAlert: FC<MyAlertProps> = ({ message, type }) => {
-  return (
-    <AlertField sc_type={type}>
-      <Alert sc_type={type}>{message}</Alert>
-    </AlertField>
-  );
+  return <Alert sc_type={type}>{message}</Alert>;
 };
 
 export default MyAlert;
@@ -21,21 +17,16 @@ interface AlertProps {
   sc_type: MessageTypes;
 }
 
-export const AlertField = styled.div<AlertProps>`
-  display: flex;
-  align-items: start;
-  justify-content: center;
-  width: 100%;
-  background: ${(props) =>
-    props.sc_type === "danger" ? "#ffebee" : "#e8f5e9"};
-  padding: 10px;
-  border-radius: 5px;
-`;
-
 export const Alert = styled.p<AlertProps>`
-  line-height: 23px;
-  border-radius: 5px;
+  font-size: 14px;
+  margin: 10px 0;
+  text-align: center;
   font-size: 0.9rem;
   width: 100%;
-  color: ${(props) => (props.sc_type === "success" ? "#43a047" : "#f44336")};
+  color: ${(props) =>
+    props.sc_type === "success"
+      ? "#43a047"
+      : props.sc_type === "danger"
+      ? "#f44336"
+      : "#ccc"};
 `;

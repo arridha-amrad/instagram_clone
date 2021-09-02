@@ -36,6 +36,7 @@ export const Label = styled.label<LabelProps>`
   transform: ${(props) =>
     props.isFloat ? "translateY(5px)" : "translateY(10px)"};
   transition: transform 0.1s ease-in;
+  user-select: none;
 `;
 
 export const InputHelperText = styled.div`

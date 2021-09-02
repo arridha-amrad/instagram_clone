@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthFooter, AuthFooterRow, Footer } from "./authFooter-el";
+import styled from "styled-components";
 
 interface FooterProps {}
 
@@ -45,3 +45,37 @@ const MyFooter: React.FC<FooterProps> = () => {
 };
 
 export default MyFooter;
+
+export const Footer = styled.div`
+  height: 100px;
+  color: #8e8e8e;
+  margin-bottom: 52px;
+`;
+
+export const AuthFooter = styled.div`
+  min-height: 99px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export const AuthFooterRow = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 400px;
+
+  @media (min-width: 600px) {
+    width: 600px;
+  }
+
+  div {
+    font-size: 10px;
+    color: #8e8e8e;
+    @media (min-width: 600px) {
+      font-size: 12px;
+    }
+  }
+`;

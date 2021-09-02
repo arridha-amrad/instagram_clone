@@ -60,7 +60,7 @@ export const register =
       dispatch({
         type: "AUTH_SUCCESS",
       });
-      dispatchMessage(dispatch, res.data, "success");
+      dispatchMessage(dispatch, res.data, "info");
     } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",

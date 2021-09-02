@@ -59,8 +59,9 @@ export const OrText = styled.span<OrTextProps>`
 `;
 
 export const AuthForm = styled.div`
+  background-color: aqua;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   flex-basis: 100%;
@@ -68,7 +69,7 @@ export const AuthForm = styled.div`
   padding: 2rem 0px;
 
   @media (min-width: 940px) {
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: flex-start;
     padding: 2rem 31px;
   }

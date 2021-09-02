@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const Footer = styled.div`
-  height: calc(100vh - 650px - 3rem + 20px);
-  display: block;
+  height: 100px;
   color: #8e8e8e;
 `;
 

@@ -4,7 +4,7 @@ import * as uuid from "uuid";
 export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
-export type MessageTypes = "success" | "danger";
+export type MessageTypes = "success" | "danger" | "info";
 
 export type MessageActionsType =
   | { type: typeof SET_MESSAGE; payload: IMessage }
