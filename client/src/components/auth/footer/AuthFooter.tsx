@@ -47,9 +47,15 @@ const MyFooter: React.FC<FooterProps> = () => {
 export default MyFooter;
 
 export const Footer = styled.div`
+  display: flex;
+  flex-shrink: 1;
+  flex-direction: column;
   height: 100px;
   color: #8e8e8e;
-  margin-bottom: 52px;
+
+  @media (min-height: 800px) {
+    margin-bottom: 50px;
+  }
 `;
 
 export const AuthFooter = styled.div`

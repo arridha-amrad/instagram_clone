@@ -13,6 +13,10 @@ export type LoginData = Pick<AuthData, "identity" | "password">;
 
 export type ForgotPasswordData = Pick<AuthData, "email">;
 
+export interface VerifyEmailData {
+  verificationCode: string;
+}
+
 export type ResetPasswordData = Pick<
   AuthData,
   "password" | "confirmPassword"

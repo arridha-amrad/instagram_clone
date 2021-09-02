@@ -6,6 +6,8 @@ import { register } from "../../redux/reduxActions/AuthActions";
 import { RegisterData } from "../../dto/AuthDTO";
 import { RegisterValidator } from "../../validators/AuthValidator";
 import AuthPage from "../../components/AuthPage";
+import { useState } from "react";
+import EmailVerification from "./EmailVerification";
 
 const Register = () => {
   const { errors, handleChange, handleSubmit, loadingAuth, states } =
@@ -20,9 +22,17 @@ const Register = () => {
     );
 
   const { email, password, username } = states;
+  const [isNext, setNext] = useState(true);
 
-  return (
-    <AuthPage link="Log In" question="Have an account ?" url="/">
+  return isNext ? (
+    <EmailVerification isNext={isNext} setNext={setNext} />
+  ) : (
+    <AuthPage
+      isNext={isNext}
+      link="Log In"
+      question="Have an account ?"
+      url="/"
+    >
       <form onSubmit={handleSubmit}>
         <AuthInput
           label="username"
@@ -50,6 +60,7 @@ const Register = () => {
           type="password"
           error={errors?.password}
         />
+
         <VSpacer aa_length="15px" />
         <Button
           disabled={

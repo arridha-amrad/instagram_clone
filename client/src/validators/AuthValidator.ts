@@ -3,6 +3,7 @@ import {
   LoginData,
   RegisterData,
   ResetPasswordData,
+  VerifyEmailData,
 } from "../dto/AuthDTO";
 
 export interface IValidatorResult<T> {
@@ -91,6 +92,21 @@ export const ResetPasswordValidator = (
   //   errors.password =
   //     "password require at least 6 characters with combination uppercase, letter, and number";
   // }
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+};
+
+export const VerifyEmailValidator = (
+  options: VerifyEmailData
+): IValidatorResult<VerifyEmailData> => {
+  const errors: Partial<Record<keyof VerifyEmailData, string>> = {};
+  if (options.verificationCode.trim() === "") {
+    errors.verificationCode = "enter your code";
+  } else {
+    delete errors.verificationCode;
+  }
   return {
     errors,
     valid: Object.keys(errors).length < 1,

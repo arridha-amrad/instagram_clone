@@ -7,12 +7,12 @@ import FacebookButton from "./auth/FacebookButton";
 import MyFooter from "./auth/footer/AuthFooter";
 import AppPlayStore from "./auth/getApp/AppPlayStore";
 import InstagramText from "../images/ig2.svg";
+import Envelope from "../icons/email.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
 
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
-import AuthAppBar from "./auth/appBar/AuthAppBar";
+import { Button } from "./accounts/form/AccountForm.elements";
 
 interface AuthPageProps {
   question: string;
@@ -20,6 +20,8 @@ interface AuthPageProps {
   url: string;
   isLoginPage?: boolean;
   children: ReactNode;
+  isNext?: boolean;
+  setNext?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthPage: FC<AuthPageProps> = ({
@@ -28,70 +30,93 @@ const AuthPage: FC<AuthPageProps> = ({
   question,
   url,
   isLoginPage = false,
+  isNext = false,
+  setNext = () => false,
 }) => {
   const { messages } = useSelector((state: RootState) => state.message);
 
-  const location = useLocation();
-
   return (
-    <>
-      {location.pathname === "/forgot-password" && <AuthAppBar />}
-      <AuthPageArea>
-        <MainArea>
-          <FormAuthAndCarouselContainer>
-            {location.pathname !== "/forgot-password" && <MyAuthCarousel />}
-            <FormAuth>
-              <Paper>
-                <VSpacer aa_length="30px" />
-                <AuthTitle>
-                  <img src={InstagramText} alt="instagram" />
-                </AuthTitle>
-
-                <VSpacer aa_length="30px" />
-
-                {children}
-
-                <OrTextWrapper>
-                  <OrText>OR</OrText>
-                </OrTextWrapper>
-                <FacebookButton />
-
-                {messages.map((message) => (
-                  <MyAlert
-                    key={message.id}
-                    message={message.text}
-                    type={message.type}
-                  />
-                ))}
-
-                {isLoginPage && (
+    <AuthPageArea>
+      <MainArea>
+        <FormAuthAndCarouselContainer>
+          {!isNext && <MyAuthCarousel />}
+          <FormAuth>
+            <Paper>
+              <AuthTitle>
+                {isNext ? (
                   <>
-                    <VSpacer />
-
-                    <MyLink to="/forgot-password">forgot password</MyLink>
-
-                    <VSpacer aa_length="20px" />
+                    <img src={Envelope} alt="envelope" />
+                    <p className="title">Enter Confirmation Code</p>
+                    <p className="info">
+                      Enter confirmation code we sent to arridhaamrad@gmail.com.{" "}
+                      <span>Resend Code.</span>
+                    </p>
                   </>
+                ) : (
+                  <img src={InstagramText} alt="instagram" />
                 )}
-              </Paper>
+              </AuthTitle>
 
-              <VSpacer />
+              <VSpacer aa_length="30px" />
 
-              <Paper>
-                <AuthQuestion>
-                  {question} &nbsp; <MyLink to={url}>{link}</MyLink>
-                </AuthQuestion>
-              </Paper>
+              {children}
 
-              <VSpacer aa_length="20px" />
+              {isNext ? (
+                <>
+                  <VSpacer />
+                  <Button
+                    aa_bg="#fff"
+                    aa_color="#03a9f4"
+                    onClick={() => setNext(false)}
+                  >
+                    Go Back
+                  </Button>
+                  <VSpacer />
+                </>
+              ) : (
+                <>
+                  <OrTextWrapper>
+                    <OrText>OR</OrText>
+                  </OrTextWrapper>
+                  <FacebookButton />
+                </>
+              )}
 
-              <AppPlayStore />
-            </FormAuth>
-          </FormAuthAndCarouselContainer>
-        </MainArea>
-        <MyFooter />
-      </AuthPageArea>
-    </>
+              {messages.map((message) => (
+                <MyAlert
+                  key={message.id}
+                  message={message.text}
+                  type={message.type}
+                />
+              ))}
+
+              {isLoginPage && (
+                <>
+                  <VSpacer />
+
+                  <MyLink to="/forgot-password">forgot password</MyLink>
+
+                  <VSpacer aa_length="20px" />
+                </>
+              )}
+            </Paper>
+
+            <VSpacer />
+
+            <Paper>
+              <AuthQuestion>
+                {question} &nbsp; <MyLink to={url}>{link}</MyLink>
+              </AuthQuestion>
+            </Paper>
+
+            <VSpacer aa_length="20px" />
+
+            <AppPlayStore />
+          </FormAuth>
+        </FormAuthAndCarouselContainer>
+      </MainArea>
+      <MyFooter />
+    </AuthPageArea>
   );
 };
 
@@ -101,17 +126,19 @@ export const AuthPageArea = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-evenly;
+  align-content: center;
   flex-direction: column;
+  overflow: scroll;
 `;
 
 export const MainArea = styled.div`
-  flex-grow: 1;
-  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
+  width: 100vw;
+  height: 100vh;
 `;
 
 export const FormAuthAndCarouselContainer = styled.div`
@@ -215,10 +242,27 @@ export const Paper2 = styled(Paper)`
 `;
 
 export const AuthTitle = styled.div`
-  height: 51px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
+
+  p {
+    width: 270px;
+    text-align: center;
+
+    span {
+      color: #03a9f4;
+      cursor: pointer;
+    }
+  }
+
+  .title {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin: 20px 0;
+  }
 
   img {
     height: 50px;

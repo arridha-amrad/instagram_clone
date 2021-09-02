@@ -6,6 +6,7 @@ import {
   LoginData,
   RegisterData,
   ResetPasswordData,
+  VerifyEmailData,
 } from "../../dto/AuthDTO";
 import * as messageActions from "../reduxReducers/MessageReducer";
 import { Dispatch as ReactDispatch } from "react";
@@ -22,6 +23,16 @@ const dispatchMessage = (
 ) => {
   dispatch(messageActions.setMessage(message, type));
 };
+
+export const verifyEmail =
+  (data: VerifyEmailData) => async (dispatch: Dispatch<AuthActionsType>) => {
+    dispatchRequiredActions(dispatch);
+    try {
+      await axiosInstance.put("/auth/verify-email");
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
 export const logout = () => async (dispatch: Dispatch<AuthActionsType>) => {
   dispatchRequiredActions(dispatch);
