@@ -1,21 +1,17 @@
-import React from "react";
-import AuthInput from "../../components/auth/input/AuthInput";
-import AuthPage from "../../components/AuthPage";
-import { VerifyEmailData } from "../../dto/AuthDTO";
-import { verifyEmail } from "../../redux/reduxActions/AuthActions";
-import { Button } from "../../styled-components/button-el";
-import { VSpacer } from "../../styled-components/spacer-el";
-import UseFormAuth from "../../utils/UseFormAuth";
-import { VerifyEmailValidator } from "../../validators/AuthValidator";
+import { VerifyEmailData } from "../dto/AuthDTO";
+import { verifyEmail } from "../redux/reduxActions/AuthActions";
+import { Button } from "../styled-components/button-el";
+import { VSpacer } from "../styled-components/spacer-el";
+import UseFormAuth from "../utils/UseFormAuth";
+import { VerifyEmailValidator } from "../validators/AuthValidator";
+import AuthInput from "./auth/input/AuthInput";
 
 interface EmailVerificationProps {
-  isNext: boolean;
-  setNext: React.Dispatch<React.SetStateAction<boolean>>;
+  goToBackStep: () => void;
 }
 
 const EmailVerification: React.FC<EmailVerificationProps> = ({
-  isNext = false,
-  setNext,
+  goToBackStep,
 }) => {
   const { errors, loadingAuth, handleChange, handleSubmit, states } =
     UseFormAuth<VerifyEmailData>(
@@ -25,13 +21,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
     );
   const { verificationCode } = states;
   return (
-    <AuthPage
-      isNext={isNext}
-      setNext={setNext}
-      question="Have an account ? "
-      link="Log In"
-      url="/"
-    >
+    <>
       <form onSubmit={handleSubmit}>
         <AuthInput
           handleChange={handleChange}
@@ -50,7 +40,13 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           {loadingAuth ? "loading..." : "Next"}
         </Button>
       </form>
-    </AuthPage>
+
+      <VSpacer />
+      <Button aa_bg="#fff" aa_color="#03a9f4" onClick={() => goToBackStep()}>
+        Go Back
+      </Button>
+      <VSpacer />
+    </>
   );
 };
 

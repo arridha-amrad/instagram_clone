@@ -10,7 +10,6 @@ import LoginActivity from "./pages/accounts/LoginActivity";
 import ManageContact from "./pages/accounts/ManageContact";
 import PrivacySecurity from "./pages/accounts/PrivacySecurity";
 import PushNotifications from "./pages/accounts/PushNotification";
-import EmailVerification from "./pages/auth/EmailVerification";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -22,7 +21,7 @@ import UserIGTV from "./pages/user/UserIGTV";
 import UserPost from "./pages/user/UserPosts";
 import Home from "./pages/Home";
 
-interface AppProps { }
+interface AppProps {}
 
 const darkMode = {
   bg: "#1a1a1a",
@@ -45,7 +44,6 @@ const App: React.FC<AppProps> = () => {
         <Switch>
           <Route exact path="/register" component={Register} />
           <Route exact path="/" component={Login} />
-          <Route exact path="/email-verification" component={EmailVerification} />
           <Route exact path="/forgot-password" component={ForgotPassword} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/home" component={Home} />
@@ -54,14 +52,42 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/user/saved" component={UserSaved} />
           <Route exact path="/user/tagged" component={UserTag} />
           <Route exact path="/accounts/edit" component={EditProfile} />
-          <Route exact path="/accounts/change-password" component={ChangePassword} />
-          <Route exact path="/accounts/app-websites" component={AppAndWebsites} />
+          <Route
+            exact
+            path="/accounts/change-password"
+            component={ChangePassword}
+          />
+          <Route
+            exact
+            path="/accounts/app-websites"
+            component={AppAndWebsites}
+          />
           <Route exact path="/accounts/email-sms" component={EmailAndSMS} />
-          <Route exact path="/accounts/emails-from-instagram" component={EmailsFromInstagram} />
-          <Route exact path="/accounts/login-activity" component={LoginActivity} />
-          <Route exact path="/accounts/manage-contacts" component={ManageContact} />
-          <Route exact path="/accounts/privacy-security" component={PrivacySecurity} />
-          <Route exact path="/accounts/push-notifications" component={PushNotifications} />
+          <Route
+            exact
+            path="/accounts/emails-from-instagram"
+            component={EmailsFromInstagram}
+          />
+          <Route
+            exact
+            path="/accounts/login-activity"
+            component={LoginActivity}
+          />
+          <Route
+            exact
+            path="/accounts/manage-contacts"
+            component={ManageContact}
+          />
+          <Route
+            exact
+            path="/accounts/privacy-security"
+            component={PrivacySecurity}
+          />
+          <Route
+            exact
+            path="/accounts/push-notifications"
+            component={PushNotifications}
+          />
         </Switch>
       </ThemeProvider>
     </BrowserRouter>

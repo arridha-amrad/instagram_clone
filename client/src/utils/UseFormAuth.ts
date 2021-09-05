@@ -6,7 +6,8 @@ import { RootState } from "../redux/Store";
 const UseFormAuth = <T>(
   callback: (state: T) => void,
   initialState: T,
-  validator: (state: T) => IValidatorResult<T>
+  validator: (state: T) => IValidatorResult<T>,
+  optional?: () => void
 ) => {
   const [states, setState] = useState<T>(initialState);
   const [errors, setErrors] = useState<FieldsError<T> | null>();
@@ -34,6 +35,9 @@ const UseFormAuth = <T>(
       });
     } else {
       setErrors(null);
+      if (optional) {
+        optional();
+      }
       dispatch(callback(states));
     }
   };

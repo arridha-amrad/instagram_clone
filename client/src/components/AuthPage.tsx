@@ -10,9 +10,9 @@ import InstagramText from "../images/ig2.svg";
 import Envelope from "../icons/email.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
+import BirthDayCake from "../icons/birthday-cake.svg";
 
 import styled from "styled-components";
-import { Button } from "./accounts/form/AccountForm.elements";
 
 interface AuthPageProps {
   question: string;
@@ -20,8 +20,8 @@ interface AuthPageProps {
   url: string;
   isLoginPage?: boolean;
   children: ReactNode;
-  isNext?: boolean;
-  setNext?: React.Dispatch<React.SetStateAction<boolean>>;
+  steps?: string[];
+  currentStep?: number;
 }
 
 const AuthPage: FC<AuthPageProps> = ({
@@ -30,8 +30,8 @@ const AuthPage: FC<AuthPageProps> = ({
   question,
   url,
   isLoginPage = false,
-  isNext = false,
-  setNext = () => false,
+  steps = [],
+  currentStep = 0,
 }) => {
   const { messages } = useSelector((state: RootState) => state.message);
 
@@ -39,11 +39,11 @@ const AuthPage: FC<AuthPageProps> = ({
     <AuthPageArea>
       <MainArea>
         <FormAuthAndCarouselContainer>
-          {!isNext && <MyAuthCarousel />}
+          {currentStep === 0 && <MyAuthCarousel />}
           <FormAuth>
             <Paper>
               <AuthTitle>
-                {isNext ? (
+                {steps[currentStep] === "emailVerification" && (
                   <>
                     <img src={Envelope} alt="envelope" />
                     <p className="title">Enter Confirmation Code</p>
@@ -52,8 +52,18 @@ const AuthPage: FC<AuthPageProps> = ({
                       <span>Resend Code.</span>
                     </p>
                   </>
-                ) : (
-                  <img src={InstagramText} alt="instagram" />
+                )}
+                {steps[currentStep] === "register" ||
+                  (isLoginPage && <img src={InstagramText} alt="instagram" />)}
+                {steps[currentStep] === "setBirthDay" && (
+                  <>
+                    <img src={BirthDayCake} alt="cake" />
+                    <p className="title">Add Your Birthday</p>
+                    <p className="info">
+                      This won't be a part of your public profile.
+                      <span>Why do I need to provide my birthday?</span>
+                    </p>
+                  </>
                 )}
               </AuthTitle>
 
@@ -61,26 +71,15 @@ const AuthPage: FC<AuthPageProps> = ({
 
               {children}
 
-              {isNext ? (
-                <>
-                  <VSpacer />
-                  <Button
-                    aa_bg="#fff"
-                    aa_color="#03a9f4"
-                    onClick={() => setNext(false)}
-                  >
-                    Go Back
-                  </Button>
-                  <VSpacer />
-                </>
-              ) : (
-                <>
-                  <OrTextWrapper>
-                    <OrText>OR</OrText>
-                  </OrTextWrapper>
-                  <FacebookButton />
-                </>
-              )}
+              {steps[currentStep] === "register" ||
+                (isLoginPage && (
+                  <>
+                    <OrTextWrapper>
+                      <OrText>OR</OrText>
+                    </OrTextWrapper>
+                    <FacebookButton />
+                  </>
+                ))}
 
               {messages.map((message) => (
                 <MyAlert
@@ -93,9 +92,7 @@ const AuthPage: FC<AuthPageProps> = ({
               {isLoginPage && (
                 <>
                   <VSpacer />
-
                   <MyLink to="/forgot-password">forgot password</MyLink>
-
                   <VSpacer aa_length="20px" />
                 </>
               )}
@@ -137,8 +134,8 @@ export const MainArea = styled.div`
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 `;
 
 export const FormAuthAndCarouselContainer = styled.div`
