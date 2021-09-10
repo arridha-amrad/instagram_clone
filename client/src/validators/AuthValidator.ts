@@ -11,6 +11,14 @@ export interface IValidatorResult<T> {
   valid: boolean;
 }
 
+export const NoValidator = (_: RegisterData): IValidatorResult<{}> => {
+  const errors = {};
+  return {
+    errors,
+    valid: true,
+  };
+};
+
 // const regExp_password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
 const regExp_email =
   /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;

@@ -1,70 +1,76 @@
 import React from "react";
 import { AccountMenuLink } from "./AccountMenu.elements";
 
-interface AccountMenuProps { }
+interface AccountMenuProps {}
 
 const AccountMenu: React.FC<AccountMenuProps> = () => {
   return (
     <>
-      <AccountMenuLink className="item" activeClassName="active" to="/accounts/edit" > Edit Profile </AccountMenuLink>
+      <AccountMenuLink
+        className="item"
+        activeClassName="active"
+        to="/accounts/edit"
+      >
+        Edit Profile
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/change-password"
       >
         Change Password
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/app-websites"
       >
         App and Websites
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/email-sms"
       >
         Email and SMS
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/push-notifications"
       >
         Push Notifications
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/manage-contacts"
       >
         Manage Contacts
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/privacy-security"
       >
         Privacy and Security
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/login-activity"
       >
         Login Activity
-            </AccountMenuLink>
+      </AccountMenuLink>
       <AccountMenuLink
         className="item"
         activeClassName="active"
         to="/accounts/emails-from-instagram"
       >
         Emails from Instagram
-            </AccountMenuLink>
+      </AccountMenuLink>
     </>
-  )
-}
+  );
+};
 
-export default AccountMenu
+export default AccountMenu;

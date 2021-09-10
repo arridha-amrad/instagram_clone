@@ -47,7 +47,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
           {label}
         </Label>
       </InputField>
-      {error && <InputWarning>This text to show error</InputWarning>}
+      {error && <InputWarning>{error}</InputWarning>}
     </>
   );
 };

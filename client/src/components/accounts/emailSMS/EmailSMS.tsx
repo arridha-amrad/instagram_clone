@@ -1,7 +1,7 @@
 import React from "react";
 import { EmailSMSContainer, MenuWrapper } from "./EmailSMS.elements";
 
-interface EmailSMSProps { }
+interface EmailSMSProps {}
 
 const EmailSMS: React.FC<EmailSMSProps> = () => {
   return (

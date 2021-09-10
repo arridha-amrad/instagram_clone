@@ -4,22 +4,43 @@ import { register } from "../redux/reduxActions/AuthActions";
 import { Button } from "../styled-components/button-el";
 import { VSpacer } from "../styled-components/spacer-el";
 import UseFormAuth from "../utils/UseFormAuth";
-import { RegisterValidator } from "../validators/AuthValidator";
+import { FieldsError, RegisterValidator } from "../validators/AuthValidator";
+import { AuthTitle, OrText, OrTextWrapper } from "./AuthPage";
+import InstagramText from "../images/ig2.svg";
+import FacebookButton from "./auth/FacebookButton";
+import { ChangeEvent, useState } from "react";
+import { FC, FormEvent } from "react";
 
-const RegisterForm = () => {
-  const { errors, handleChange, handleSubmit, loadingAuth, states } =
-    UseFormAuth<RegisterData>(
-      register,
-      {
-        email: "",
-        password: "",
-        username: "",
-      },
-      RegisterValidator
-    );
+interface RegisterFormProps {
+  states: RegisterData;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  goToNextStep: () => void;
+}
+
+const RegisterForm: FC<RegisterFormProps> = ({
+  states,
+  handleChange,
+  goToNextStep,
+}) => {
   const { username, email, password } = states;
+  const [errors, setErrors] = useState<FieldsError<RegisterData>>();
+
+  const submitRegistrationData = () => {
+    const { errors: validatorResults, valid } = RegisterValidator(states);
+    if (valid) {
+      goToNextStep();
+    }
+    setErrors({
+      ...validatorResults,
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+      <AuthTitle>
+        <img src={InstagramText} alt="instagram text" />
+      </AuthTitle>
+      <VSpacer aa_length="20px" />
       <AuthInput
         label="username"
         name="username"
@@ -49,15 +70,18 @@ const RegisterForm = () => {
 
       <VSpacer aa_length="15px" />
       <Button
-        disabled={
-          username === "" || email === "" || password === "" || loadingAuth
-        }
-        type="submit"
+        disabled={username === "" || email === "" || password === ""}
         aa_isFullWidth
+        onClick={submitRegistrationData}
       >
-        {loadingAuth ? "loading..." : "Sign Up"}
+        Sign Up
       </Button>
-    </form>
+      <OrTextWrapper>
+        <OrText>OR</OrText>
+      </OrTextWrapper>
+      <FacebookButton />
+      <VSpacer aa_length="15px" />
+    </>
   );
 };
 

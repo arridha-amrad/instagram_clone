@@ -10,7 +10,7 @@ const UseFormAuth = <T>(
   optional?: () => void
 ) => {
   const [states, setState] = useState<T>(initialState);
-  const [errors, setErrors] = useState<FieldsError<T> | null>();
+  const [errors, setErrors] = useState<FieldsError<T>>({});
   const dispatch = useDispatch();
   const { loadingAuth, requestStatus } = useSelector(
     (state: RootState) => state.auth
@@ -34,7 +34,7 @@ const UseFormAuth = <T>(
         ...validatorErrors,
       });
     } else {
-      setErrors(null);
+      setErrors({});
       if (optional) {
         optional();
       }

@@ -1,15 +1,26 @@
 import React from "react";
-import { FormGroup, InputArea, SimilarAccountWarningArea } from "./AccountForm.elements";
+import {
+  FormGroup,
+  InputArea,
+  SimilarAccountWarningArea,
+} from "./AccountForm.elements";
 
 interface AccountInputProps {
   inputSize?: "big" | "small";
   labelStr: string;
   name: string;
   type?: string;
-  isInputArea?: boolean
+  isInputArea?: boolean;
 }
 
-const AccountInput: React.FC<AccountInputProps> = ({ labelStr, name, inputSize = "small", children, type = "text", isInputArea = true }) => {
+const AccountInput: React.FC<AccountInputProps> = ({
+  labelStr,
+  name,
+  inputSize = "small",
+  children,
+  type = "text",
+  isInputArea = true,
+}) => {
   return (
     <FormGroup aa_bigInput={inputSize === "big" ? true : false}>
       <label>{labelStr}</label>
@@ -21,21 +32,16 @@ const AccountInput: React.FC<AccountInputProps> = ({ labelStr, name, inputSize =
           ) : (
             <input name={name} type={type} />
           )}
-          {children && (
-            children
-          )}
+          {children && children}
         </InputArea>
       ) : (
         <SimilarAccountWarningArea>
           <input type="checkbox" name={name} />
-          {children && (
-            children
-          )}
+          {children && children}
         </SimilarAccountWarningArea>
       )}
-
     </FormGroup>
-  )
-}
+  );
+};
 
-export default AccountInput
+export default AccountInput;

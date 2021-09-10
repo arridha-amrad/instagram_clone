@@ -1,11 +1,18 @@
 import { Button } from "../../styled-components/button-el";
 import { VSpacer } from "../../styled-components/spacer-el";
 import AuthInput from "../../components/auth/input/AuthInput";
-import AuthPage from "../../components/AuthPage";
+import AuthPage, { OrText, OrTextWrapper } from "../../components/AuthPage";
 import UseFormAuth from "../../utils/UseFormAuth";
 import { LoginData } from "../../dto/AuthDTO";
 import { login } from "../../redux/reduxActions/AuthActions";
 import { LoginValidator } from "../../validators/AuthValidator";
+import { AuthTitle } from "../../components/AuthPage";
+import InstagramText from "../../images/ig2.svg";
+import MyAlert from "../../components/alert/MyAlert";
+import FacebookButton from "../../components/auth/FacebookButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/Store";
+import { MyLink } from "../../styled-components/link-el";
 
 const Login = () => {
   const { errors, handleChange, handleSubmit, loadingAuth, states } =
@@ -19,6 +26,8 @@ const Login = () => {
     );
   const { password, identity } = states;
 
+  const { messages } = useSelector((state: RootState) => state.message);
+
   return (
     <AuthPage
       link="Sign Up"
@@ -26,6 +35,11 @@ const Login = () => {
       url="/register"
       isLoginPage={true}
     >
+      <AuthTitle>
+        <img src={InstagramText} alt="instagram text" />
+      </AuthTitle>
+      <VSpacer aa_length="20px" />
+
       <form onSubmit={handleSubmit}>
         <AuthInput
           type="text"
@@ -53,6 +67,18 @@ const Login = () => {
           {loadingAuth ? "loading..." : "Log In"}
         </Button>
       </form>
+      <>
+        <OrTextWrapper>
+          <OrText>OR</OrText>
+        </OrTextWrapper>
+        <FacebookButton />
+      </>
+      {messages.map((message) => (
+        <MyAlert key={message.id} message={message.text} type={message.type} />
+      ))}
+      <VSpacer />
+      <MyLink to="/forgot-password">forgot password</MyLink>
+      <VSpacer aa_length="20px" />
     </AuthPage>
   );
 };

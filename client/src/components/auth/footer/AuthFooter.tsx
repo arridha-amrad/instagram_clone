@@ -48,7 +48,6 @@ export default MyFooter;
 
 export const Footer = styled.div`
   display: flex;
-  flex-shrink: 1;
   flex-direction: column;
   height: 100px;
   color: #8e8e8e;

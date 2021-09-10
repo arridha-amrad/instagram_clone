@@ -5,9 +5,13 @@ export interface AuthData {
   confirmPassword: string;
   identity: string;
   isLogin: boolean;
+  birthDay: string;
 }
 
-export type RegisterData = Pick<AuthData, "email" | "password" | "username">;
+export type RegisterData = Pick<
+  AuthData,
+  "email" | "password" | "username" | "birthDay"
+>;
 
 export type LoginData = Pick<AuthData, "identity" | "password">;
 

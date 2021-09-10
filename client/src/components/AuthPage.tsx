@@ -1,16 +1,9 @@
 import { FC, ReactNode } from "react";
 import { MyLink } from "../styled-components/link-el";
 import { VSpacer } from "../styled-components/spacer-el";
-import MyAlert from "./alert/MyAlert";
 import MyAuthCarousel from "./auth/carousel/AuthCarousel";
-import FacebookButton from "./auth/FacebookButton";
 import MyFooter from "./auth/footer/AuthFooter";
 import AppPlayStore from "./auth/getApp/AppPlayStore";
-import InstagramText from "../images/ig2.svg";
-import Envelope from "../icons/email.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/Store";
-import BirthDayCake from "../icons/birthday-cake.svg";
 
 import styled from "styled-components";
 
@@ -29,85 +22,22 @@ const AuthPage: FC<AuthPageProps> = ({
   link,
   question,
   url,
-  isLoginPage = false,
-  steps = [],
   currentStep = 0,
 }) => {
-  const { messages } = useSelector((state: RootState) => state.message);
-
   return (
     <AuthPageArea>
       <MainArea>
         <FormAuthAndCarouselContainer>
           {currentStep === 0 && <MyAuthCarousel />}
           <FormAuth>
-            <Paper>
-              <AuthTitle>
-                {steps[currentStep] === "emailVerification" && (
-                  <>
-                    <img src={Envelope} alt="envelope" />
-                    <p className="title">Enter Confirmation Code</p>
-                    <p className="info">
-                      Enter confirmation code we sent to arridhaamrad@gmail.com.{" "}
-                      <span>Resend Code.</span>
-                    </p>
-                  </>
-                )}
-                {steps[currentStep] === "register" ||
-                  (isLoginPage && <img src={InstagramText} alt="instagram" />)}
-                {steps[currentStep] === "setBirthDay" && (
-                  <>
-                    <img src={BirthDayCake} alt="cake" />
-                    <p className="title">Add Your Birthday</p>
-                    <p className="info">
-                      This won't be a part of your public profile.
-                      <span>Why do I need to provide my birthday?</span>
-                    </p>
-                  </>
-                )}
-              </AuthTitle>
-
-              <VSpacer aa_length="30px" />
-
-              {children}
-
-              {steps[currentStep] === "register" ||
-                (isLoginPage && (
-                  <>
-                    <OrTextWrapper>
-                      <OrText>OR</OrText>
-                    </OrTextWrapper>
-                    <FacebookButton />
-                  </>
-                ))}
-
-              {messages.map((message) => (
-                <MyAlert
-                  key={message.id}
-                  message={message.text}
-                  type={message.type}
-                />
-              ))}
-
-              {isLoginPage && (
-                <>
-                  <VSpacer />
-                  <MyLink to="/forgot-password">forgot password</MyLink>
-                  <VSpacer aa_length="20px" />
-                </>
-              )}
-            </Paper>
-
+            <Paper>{children}</Paper>
             <VSpacer />
-
             <Paper>
               <AuthQuestion>
                 {question} &nbsp; <MyLink to={url}>{link}</MyLink>
               </AuthQuestion>
             </Paper>
-
             <VSpacer aa_length="20px" />
-
             <AppPlayStore />
           </FormAuth>
         </FormAuthAndCarouselContainer>
