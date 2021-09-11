@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
+export type ValidationResult = "available" | "not-available";
+
 interface AuthInputProps {
   type: string;
   value: string;
@@ -8,6 +10,9 @@ interface AuthInputProps {
   name: string;
   error?: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyUp?: any;
+  isWithValidation?: boolean;
+  validationResult?: any;
 }
 
 const AuthInput: React.FC<AuthInputProps> = ({
@@ -17,18 +22,38 @@ const AuthInput: React.FC<AuthInputProps> = ({
   error,
   type,
   handleChange,
+  onKeyUp = undefined,
+  isWithValidation = false,
+  validationResult,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  console.log("validation result : ", validationResult);
+
   return (
     <>
       <InputField>
-        {type === "password" && !!value && (
-          <PasswordToggler onClick={() => setShowPassword((prev) => !prev)}>
-            {showPassword ? "Hide" : "Show"}
-          </PasswordToggler>
-        )}
+        <AdditionalArea>
+          <>
+            {isWithValidation && (
+              <>
+                {validationResult === "available" && (
+                  <ValidIcon className="far fa-check-circle"></ValidIcon>
+                )}
+                {validationResult === "not-available" && (
+                  <InValidIcon className="far fa-times-circle"></InValidIcon>
+                )}
+              </>
+            )}
+            {type === "password" && !!value && (
+              <PasswordToggler onClick={() => setShowPassword((prev) => !prev)}>
+                {showPassword ? "Hide" : "Show"}
+              </PasswordToggler>
+            )}
+          </>
+        </AdditionalArea>
+
         <Input
           ref={inputRef}
           type={
@@ -41,6 +66,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
           name={name}
           isFloat={!!value}
           value={value}
+          onKeyUp={onKeyUp}
           onChange={handleChange}
         />
         <Label onClick={() => inputRef.current?.focus()} isFloat={!!value}>
@@ -54,8 +80,31 @@ const AuthInput: React.FC<AuthInputProps> = ({
 
 export default AuthInput;
 
+const AdditionalArea = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+`;
+
+const ValidIcon = styled.i`
+  display: block;
+  font-size: 1.1rem;
+  color: var(--grey);
+`;
+
+const InValidIcon = styled.i`
+  display: block;
+  font-size: 1.1rem;
+  color: var(--red);
+`;
+
 export const InputField = styled.div`
+  display: flex;
+  align-items: center;
+  z-index: 0;
   width: 100%;
+  flex-grow: 1;
   height: 38px;
   position: relative;
 `;
@@ -65,17 +114,20 @@ interface InputProps {
 }
 export const Input = styled.input<InputProps>`
   height: 100%;
-  width: 100%;
-  border-radius: 0px;
+  z-index: 0;
+  display: flex;
+  flex-grow: 1;
+  border-radius: 3px;
   border: 1px solid #dbdbdb;
   font-size: 12px;
   padding: ${(props) => (props.isFloat ? "13px" : "0")} 10px 0;
-  background-color: #fafafa;
+  background-color: transparent;
   color: #262626;
   letter-spacing: 0.1px;
 
   &:focus {
     outline: none;
+    border: 1px solid #7e7e7e;
   }
 `;
 
@@ -89,7 +141,7 @@ export const Label = styled.label<LabelProps>`
   color: #949494;
   font-size: ${(props) => (props.isFloat ? "10px" : "12px")};
   transform: ${(props) =>
-    props.isFloat ? "translateY(5px)" : "translateY(10px)"};
+    props.isFloat ? "translateY(-8px)" : "translateY(0px)"};
   transition: transform 0.1s ease-in;
   user-select: none;
 `;
@@ -101,17 +153,15 @@ export const InputWarning = styled.div`
   color: red;
 `;
 
-export const PasswordToggler = styled.button`
-  position: absolute;
-  z-index: 99;
-  top: 12px;
-  right: 10px;
+export const PasswordToggler = styled.div`
   font-weight: 700;
+  z-index: 99;
   border: none;
   font-size: 14px;
   color: #262626;
   background-color: transparent;
   cursor: pointer;
+  margin-left: 5px;
 
   &:focus {
     outline: none;

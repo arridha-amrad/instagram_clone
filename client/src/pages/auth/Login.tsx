@@ -30,10 +30,10 @@ const Login = () => {
 
   return (
     <AuthPage
+      isWithCarousel={true}
       link="Sign Up"
-      question="Don't have an account ?"
-      url="/register"
-      isLoginPage={true}
+      question="Don't have an account? "
+      url="/accounts/emailsignup"
     >
       <AuthTitle>
         <img src={InstagramText} alt="instagram text" />
@@ -77,7 +77,7 @@ const Login = () => {
         <MyAlert key={message.id} message={message.text} type={message.type} />
       ))}
       <VSpacer />
-      <MyLink to="/forgot-password">forgot password</MyLink>
+      <MyLink to="/forgot-password">Forgot password?</MyLink>
       <VSpacer aa_length="20px" />
     </AuthPage>
   );

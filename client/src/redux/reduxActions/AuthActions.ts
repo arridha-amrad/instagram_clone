@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { AuthActionsType } from "../reduxTypes/AuthTypes";
 import axiosInstance from "../../utils/AxiosInterceptors";
 import {
+  BirthDayData,
   ForgotPasswordData,
   LoginData,
   RegisterData,
@@ -24,11 +25,33 @@ const dispatchMessage = (
   dispatch(messageActions.setMessage(message, type));
 };
 
+export const isDataAvailable =
+  (data: string) => async (): Promise<string | undefined> => {
+    try {
+      const res = await axiosInstance.post("/auth/is-exists", { data });
+      return res.data;
+    } catch (err: any) {
+      console.log(err.response);
+      return undefined;
+    }
+  };
+
+export const setBirthDayAction =
+  (data: BirthDayData) => async (dispatch: Dispatch<AuthActionsType>) => {
+    dispatchRequiredActions(dispatch);
+    try {
+      const birthDayString = `${data.month} ${data.date} ${data.year}`;
+      console.log("your birthday : ", birthDayString);
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
 export const verifyEmail =
   (data: VerifyEmailData) => async (dispatch: Dispatch<AuthActionsType>) => {
     dispatchRequiredActions(dispatch);
     try {
-      await axiosInstance.put("/auth/verify-email");
+      await axiosInstance.put("/auth/verify-email", data);
     } catch (err: any) {
       console.log(err);
     }
@@ -72,6 +95,7 @@ export const register =
         type: "AUTH_SUCCESS",
       });
       dispatchMessage(dispatch, res.data, "info");
+      console.log("data", registrationData);
     } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",

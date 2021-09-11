@@ -11,7 +11,7 @@ export interface IValidatorResult<T> {
   valid: boolean;
 }
 
-export const NoValidator = (_: RegisterData): IValidatorResult<{}> => {
+export const NoValidator = (_: any): IValidatorResult<{}> => {
   const errors = {};
   return {
     errors,
@@ -39,6 +39,11 @@ export const RegisterValidator = (
     errors.email = "Please input your valid email";
   } else {
     delete errors.email;
+  }
+  if (!password) {
+    errors.password = "password is required";
+  } else {
+    delete errors.password;
   }
   // if (!password.match(regExp_password)) {
   //   errors.password =

@@ -1,52 +1,50 @@
 import React from "react";
-import FButton from "../../icons/facebook.svg";
 import styled from "styled-components";
 
-interface FacebookButtonProps {}
-
-const FacebookButton: React.FC<FacebookButtonProps> = () => {
+interface FacebookButtonProps {
+  isRegisterPage?: boolean;
+}
+const FacebookButton: React.FC<FacebookButtonProps> = ({
+  isRegisterPage = false,
+}) => {
   return (
-    <GButton>
-      <IconWrapper>
-        <IconBtn src={FButton} />
-      </IconWrapper>
-      <BtnText className="bt">Log in with Facebook</BtnText>
-    </GButton>
+    <FButton isRegisterPage={isRegisterPage}>
+      <i className="fab fa-facebook-square"></i>
+      <p>Log in with Facebook</p>
+    </FButton>
   );
 };
 
 export default FacebookButton;
 
-export const GButton = styled.div`
+interface FButtonProps {
+  isRegisterPage?: boolean;
+}
+
+export const FButton = styled.div<FButtonProps>`
   display: flex;
-  height: 40px;
+  height: 35px;
   width: 100%;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
-  background-color: #fff;
+  background-color: ${(props) =>
+    props.isRegisterPage ? "var(--lightBlue)" : "#fff"};
   justify-content: center;
   outline: none;
   border: none;
-`;
+  margin: 0.9rem 0;
 
-export const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  background-color: #fafafa;
-  border-radius: 5px;
-`;
+  i {
+    font-size: 25px;
+    color: ${(props) => (props.isRegisterPage ? "#fff" : "var(--darkBlue)")};
+  }
 
-export const IconBtn = styled.img`
-  width: 23px;
-`;
-
-export const BtnText = styled.h1`
-  font-size: 0.9rem;
-  color: #566b97;
-  margin-left: 8px;
+  p {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${(props) => (props.isRegisterPage ? "#fff" : "var(--darkBlue)")};
+    margin-left: 8px;
+  }
 `;

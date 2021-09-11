@@ -42,7 +42,7 @@ const App: React.FC<AppProps> = () => {
       <ThemeProvider theme={themes["light"]}>
         <GlobalStyles />
         <Switch>
-          <Route exact path="/register" component={Register} />
+          <Route exact path="/accounts/emailsignup" component={Register} />
           <Route exact path="/" component={Login} />
           <Route exact path="/forgot-password" component={ForgotPassword} />
           <Route exact path="/reset-password" component={ResetPassword} />

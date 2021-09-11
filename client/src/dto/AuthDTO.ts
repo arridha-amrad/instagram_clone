@@ -2,15 +2,21 @@ export interface AuthData {
   username: string;
   email: string;
   password: string;
+  fullName: string;
   confirmPassword: string;
   identity: string;
   isLogin: boolean;
-  birthDay: string;
+}
+
+export interface BirthDayData {
+  date: string;
+  month: string;
+  year: string;
 }
 
 export type RegisterData = Pick<
   AuthData,
-  "email" | "password" | "username" | "birthDay"
+  "email" | "password" | "username" | "fullName"
 >;
 
 export type LoginData = Pick<AuthData, "identity" | "password">;

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { MyLink } from "../styled-components/link-el";
+import { LinkBold } from "../styled-components/link-el";
 import { VSpacer } from "../styled-components/spacer-el";
 import MyAuthCarousel from "./auth/carousel/AuthCarousel";
 import MyFooter from "./auth/footer/AuthFooter";
@@ -11,10 +11,9 @@ interface AuthPageProps {
   question: string;
   link: string;
   url: string;
-  isLoginPage?: boolean;
   children: ReactNode;
   steps?: string[];
-  currentStep?: number;
+  isWithCarousel: boolean;
 }
 
 const AuthPage: FC<AuthPageProps> = ({
@@ -22,19 +21,19 @@ const AuthPage: FC<AuthPageProps> = ({
   link,
   question,
   url,
-  currentStep = 0,
+  isWithCarousel,
 }) => {
   return (
     <AuthPageArea>
       <MainArea>
         <FormAuthAndCarouselContainer>
-          {currentStep === 0 && <MyAuthCarousel />}
+          {isWithCarousel && <MyAuthCarousel />}
           <FormAuth>
             <Paper>{children}</Paper>
             <VSpacer />
             <Paper>
               <AuthQuestion>
-                {question} &nbsp; <MyLink to={url}>{link}</MyLink>
+                {question}&nbsp;<LinkBold to={url}>{link}</LinkBold>
               </AuthQuestion>
             </Paper>
             <VSpacer aa_length="20px" />
@@ -51,12 +50,13 @@ export default AuthPage;
 
 export const AuthPageArea = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100%;
+  overflow: hidden;
+  flex-grow: 1;
   display: flex;
   justify-content: space-evenly;
   align-content: center;
   flex-direction: column;
-  overflow: scroll;
 `;
 
 export const MainArea = styled.div`
@@ -64,6 +64,7 @@ export const MainArea = styled.div`
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  margin: 32px 0;
   width: 100%;
   height: 100%;
 `;
@@ -103,7 +104,7 @@ export const OrText = styled.span<OrTextProps>`
   transform: translate(-50%, -50%);
   background-color: ${(props) => props.aa_bg || "#fff"};
   padding: 0 1rem;
-  color: #ccc;
+  color: #777777;
   font-size: 14px;
   font-weight: 600;
 `;
@@ -132,7 +133,7 @@ export const Paper = styled.div`
   padding: 0px 40px;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 350px;
   border: 1px solid #ccc;
   z-index: 99;
   background-color: #fff;
@@ -173,7 +174,7 @@ export const AuthTitle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin: 30px 0 15px;
 
   p {
     width: 270px;

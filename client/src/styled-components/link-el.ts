@@ -2,10 +2,17 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const MyLink = styled(Link)`
-  color: #566b97;
-  display: block;
+  color: var(--darkBlue);
   text-align: center;
   font-size: 13px;
+  text-decoration: none;
+`;
+
+export const LinkBold = styled(Link)`
+  color: var(--lightBlue);
+  font-weight: 600;
+  text-align: center;
+  font-size: 14px;
   text-decoration: none;
 `;
 

@@ -42,7 +42,9 @@ const UseFormAuth = <T>(
     }
   };
   const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     event.persist();
     setState({
