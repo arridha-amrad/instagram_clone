@@ -31,6 +31,25 @@ import { generateNumber } from '../utils/RandomNumberGenerator';
 import * as VerificationServices from '../services/VerificationService';
 import { IVerificationModel } from '../models/VerificationModel';
 
+export const isExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const user = await UserServices.findUserByUsernameOrEmail(req.body.data);
+    console.log('data : ', req.body.data);
+
+    if (user) {
+      res.status(200).send('not-available');
+    } else {
+      res.status(200).send('available');
+    }
+  } catch (err) {
+    next(new ServerErrorException());
+  }
+};
+
 export const registerHandler = async (
   req: Request,
   res: Response,
