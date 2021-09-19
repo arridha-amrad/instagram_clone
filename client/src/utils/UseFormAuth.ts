@@ -7,7 +7,7 @@ const UseFormAuth = <T>(
   callback: (state: T) => void,
   initialState: T,
   validator: (state: T) => IValidatorResult<T>,
-  optional?: () => void
+  optional?: any
 ) => {
   const [states, setState] = useState<T>(initialState);
   const [errors, setErrors] = useState<FieldsError<T>>({});
@@ -58,6 +58,7 @@ const UseFormAuth = <T>(
     handleChange,
     loadingAuth,
     states,
+    setState,
     errors,
   };
 };

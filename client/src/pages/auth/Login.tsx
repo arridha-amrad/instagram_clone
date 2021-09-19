@@ -1,7 +1,7 @@
 import { Button } from "../../styled-components/button-el";
 import { VSpacer } from "../../styled-components/spacer-el";
 import AuthInput from "../../components/auth/input/AuthInput";
-import AuthPage, { OrText, OrTextWrapper } from "../../components/AuthPage";
+import AuthPage from "../../components/AuthPage";
 import UseFormAuth from "../../utils/UseFormAuth";
 import { LoginData } from "../../dto/AuthDTO";
 import { login } from "../../redux/reduxActions/AuthActions";
@@ -13,6 +13,7 @@ import FacebookButton from "../../components/auth/FacebookButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
 import { MyLink } from "../../styled-components/link-el";
+import OrDivider from "../../components/ORDivider";
 
 const Login = () => {
   const { errors, handleChange, handleSubmit, loadingAuth, states } =
@@ -67,16 +68,14 @@ const Login = () => {
           {loadingAuth ? "loading..." : "Log In"}
         </Button>
       </form>
-      <>
-        <OrTextWrapper>
-          <OrText>OR</OrText>
-        </OrTextWrapper>
-        <FacebookButton />
-      </>
+
+      <VSpacer />
+      <OrDivider />
+      <FacebookButton />
+
       {messages.map((message) => (
         <MyAlert key={message.id} message={message.text} type={message.type} />
       ))}
-      <VSpacer />
       <MyLink to="/forgot-password">Forgot password?</MyLink>
       <VSpacer aa_length="20px" />
     </AuthPage>

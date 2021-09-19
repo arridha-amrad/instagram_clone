@@ -25,35 +25,17 @@ const dispatchMessage = (
   dispatch(messageActions.setMessage(message, type));
 };
 
-export const isDataAvailable =
-  (data: string) => async (): Promise<string | undefined> => {
-    try {
-      const res = await axiosInstance.post("/auth/is-exists", { data });
-      return res.data;
-    } catch (err: any) {
-      console.log(err.response);
-      return undefined;
-    }
-  };
-
-export const setBirthDayAction =
-  (data: BirthDayData) => async (dispatch: Dispatch<AuthActionsType>) => {
-    dispatchRequiredActions(dispatch);
-    try {
-      const birthDayString = `${data.month} ${data.date} ${data.year}`;
-      console.log("your birthday : ", birthDayString);
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
-
 export const verifyEmail =
   (data: VerifyEmailData) => async (dispatch: Dispatch<AuthActionsType>) => {
     dispatchRequiredActions(dispatch);
     try {
       await axiosInstance.put("/auth/verify-email", data);
+      dispatchMessage(dispatch, "Email verification is successful", "success");
+      dispatch({ type: "REDIRECT_TO_LOGIN" });
     } catch (err: any) {
-      console.log(err);
+      console.log(err.response);
+      dispatchMessage(dispatch, err.response.data, "danger");
+      dispatch({ type: "AUTH_ERROR" });
     }
   };
 

@@ -4,13 +4,23 @@ import { VSpacer } from "../styled-components/spacer-el";
 import { Button } from "./accounts/form/AccountForm.elements";
 import BirthDayCakeIcon from "../icons/birthday-cake.svg";
 import { AuthTitle } from "./AuthPage";
-import UseFormAuth from "../utils/UseFormAuth";
-import { setBirthDayAction } from "../redux/reduxActions/AuthActions";
-import { NoValidator } from "../validators/AuthValidator";
+import { BirthDayState } from "../pages/auth/Register";
 
-interface BirthDayFormProps {}
+interface BirthDayFormProps {
+  data: BirthDayState;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
+  isLoading: boolean;
+}
 
-const BirthDayForm: FC<BirthDayFormProps> = () => {
+const BirthDayForm: FC<BirthDayFormProps> = ({
+  data,
+  handleSubmit,
+  handleChange,
+  isLoading,
+}) => {
   const months = [
     "--month--",
     "January",
@@ -46,16 +56,6 @@ const BirthDayForm: FC<BirthDayFormProps> = () => {
     return years;
   };
 
-  const { handleChange, handleSubmit, states } = UseFormAuth(
-    setBirthDayAction,
-    {
-      date: "",
-      month: "",
-      year: "",
-    },
-    NoValidator
-  );
-
   return (
     <>
       <AuthTitle>
@@ -69,21 +69,21 @@ const BirthDayForm: FC<BirthDayFormProps> = () => {
       <VSpacer aa_length="20px" />
       <form onSubmit={handleSubmit}>
         <FormContainer>
-          <Select name="month" onChange={handleChange} value={states.month}>
+          <Select name="month" onChange={handleChange} value={data.month}>
             {months.map((month, index) => (
               <option key={index} value={month}>
                 {month}
               </option>
             ))}
           </Select>
-          <Select name="date" onChange={handleChange} value={states.date}>
+          <Select name="date" onChange={handleChange} value={data.date}>
             {createDate().map((date) => (
               <option key={date} value={date}>
                 {date}
               </option>
             ))}
           </Select>
-          <Select name="year" onChange={handleChange} value={states.year}>
+          <Select name="year" onChange={handleChange} value={data.year}>
             {createYears().map((year, index) => (
               <option key={index} value={year}>
                 {year}
@@ -97,17 +97,18 @@ const BirthDayForm: FC<BirthDayFormProps> = () => {
         </Text>
         <Button
           disabled={
-            states.date === "" ||
-            states.month === "" ||
-            states.year === "" ||
-            states.date === "--date--" ||
-            states.month === "--month--" ||
-            states.year === "--year--"
+            data.date === "" ||
+            data.month === "" ||
+            data.year === "" ||
+            data.date === "--date--" ||
+            data.month === "--month--" ||
+            data.year === "--year--" ||
+            isLoading
           }
           aa_isFullWidth={true}
           type="submit"
         >
-          Next
+          {isLoading ? "loading..." : "Next"}
         </Button>
         <VSpacer aa_length="20px" />
       </form>

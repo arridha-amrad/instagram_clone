@@ -11,9 +11,11 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "vbbvnb",
-  "email": "vbnbvbb@vc.com",
-  "password": "123456"
+  "email": "arridhaamrad@gmail.com",
+  "username": "arridha2108",
+  "password": "123456",
+  "fullName": "Arridha Amrad",
+  "birthDay": "08 November 1994"
 }
 
 ### Email confirmation ✅

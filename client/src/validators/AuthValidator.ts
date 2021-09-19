@@ -19,9 +19,17 @@ export const NoValidator = (_: any): IValidatorResult<{}> => {
   };
 };
 
-// const regExp_password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
-const regExp_email =
+export const regExpPassword =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
+
+export const regexpEmail =
   /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
+
+export const regexpUsername =
+  /^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/;
+
+export const regexpFullName =
+  /(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/;
 
 export type FieldsError<T> = Partial<Record<keyof T, string>>;
 
@@ -35,7 +43,7 @@ export const RegisterValidator = (
   } else {
     delete errors.username;
   }
-  if (!email.match(regExp_email)) {
+  if (!email.match(regexpEmail)) {
     errors.email = "Please input your valid email";
   } else {
     delete errors.email;

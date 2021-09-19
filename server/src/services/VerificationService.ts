@@ -17,10 +17,12 @@ export const findCodeAndNotComplete = async (
 
 export const findCodeAndUpdate = async (
   code: string,
+  email: string,
 ): Promise<IVerificationModel | null> => {
   return VerificationModel.findOneAndUpdate(
     {
       code,
+      email,
       isComplete: false,
     },
     { isComplete: true, code: '-' },

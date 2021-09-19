@@ -6,6 +6,7 @@ export interface AuthData {
   confirmPassword: string;
   identity: string;
   isLogin: boolean;
+  birthDay: string;
 }
 
 export interface BirthDayData {
@@ -16,7 +17,7 @@ export interface BirthDayData {
 
 export type RegisterData = Pick<
   AuthData,
-  "email" | "password" | "username" | "fullName"
+  "email" | "password" | "username" | "fullName" | "birthDay"
 >;
 
 export type LoginData = Pick<AuthData, "identity" | "password">;
@@ -25,6 +26,7 @@ export type ForgotPasswordData = Pick<AuthData, "email">;
 
 export interface VerifyEmailData {
   verificationCode: string;
+  email: string;
 }
 
 export type ResetPasswordData = Pick<

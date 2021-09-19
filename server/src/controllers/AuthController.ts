@@ -37,13 +37,16 @@ export const isExists = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const user = await UserServices.findUserByUsernameOrEmail(req.body.data);
-    console.log('data : ', req.body.data);
-
+    const { data }: { data: string } = req.body;
+    const user = await UserServices.findUserByUsernameOrEmail(data);
     if (user) {
-      res.status(200).send('not-available');
+      res
+        .status(200)
+        .send(
+          `${data.includes('@') ? 'Email' : 'Username'} has been registered`,
+        );
     } else {
-      res.status(200).send('available');
+      res.status(200).send('ok');
     }
   } catch (err) {
     next(new ServerErrorException());
@@ -102,19 +105,8 @@ export const registerHandler = async (
       HTTP_CODE.CREATED,
       msg.registerSuccess(savedUser.email),
     );
-    // eslint-disable-next-line
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
-    if (err.keyPattern.email === 1) {
-      return next(
-        new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(email)),
-      );
-    }
-    if (err.keyPattern.username === 1) {
-      return next(
-        new Exception(HTTP_CODE.BAD_REQUEST, msg.duplicateData(username)),
-      );
-    }
     return next(new ServerErrorException());
   }
 };
@@ -124,10 +116,13 @@ export const emailVerificationHandler = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { verificationCode } = req.body;
+  console.log('body : ', req.body);
+
+  const { verificationCode, email } = req.body;
   try {
     const verification = await VerificationServices.findCodeAndUpdate(
       verificationCode,
+      email,
     );
     if (verification) {
       const user = await UserServices.findUserByIdAndUpdate(verification.user, {
@@ -142,6 +137,8 @@ export const emailVerificationHandler = async (
           msg.emailVerified(user.username),
         );
       }
+    } else {
+      res.status(400).send('wrong code');
     }
   } catch (err) {
     console.log('email verification errors : ', err);

@@ -5,12 +5,14 @@ import { AuthenticationStrategy, RequiredAuthAction } from '../enums/UserEnum';
 export interface IUserModel {
   _id: Schema.Types.ObjectId;
   username: string;
+  fullName: string;
   strategy: AuthenticationStrategy;
   email: string;
   password: string;
   requiredAuthAction: RequiredAuthAction;
   jwtVersion: string;
   role: string;
+  birthDay: string;
   // optional
   isActive?: boolean;
   isLogin?: boolean;
@@ -31,10 +33,18 @@ const UserSchema = new mongoose.Schema<
       required: true,
       unique: true,
     },
+    fullName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
       unique: true,
+    },
+    birthDay: {
+      type: String,
+      required: true,
     },
     role: {
       type: String,

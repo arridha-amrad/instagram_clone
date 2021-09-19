@@ -34,7 +34,7 @@ export const FButton = styled.div<FButtonProps>`
   justify-content: center;
   outline: none;
   border: none;
-  margin: 0.9rem 0;
+  margin: 12px 0;
 
   i {
     font-size: 25px;

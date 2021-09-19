@@ -1,48 +1,151 @@
 import AuthInput from "./auth/input/AuthInput";
 import { RegisterData } from "../dto/AuthDTO";
-import { register } from "../redux/reduxActions/AuthActions";
 import { Button } from "../styled-components/button-el";
 import { VSpacer } from "../styled-components/spacer-el";
-import UseFormAuth from "../utils/UseFormAuth";
-import { RegisterValidator } from "../validators/AuthValidator";
-import { AuthTitle, OrText, OrTextWrapper } from "./AuthPage";
+import {
+  regexpEmail,
+  regexpFullName,
+  regExpPassword,
+  regexpUsername,
+} from "../validators/AuthValidator";
+import { AuthTitle } from "./AuthPage";
 import InstagramText from "../images/ig2.svg";
 import FacebookButton from "./auth/FacebookButton";
 import { FC, useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "../utils/AxiosInterceptors";
+import { ChangeEvent, FormEvent } from "react-router/node_modules/@types/react";
+import OrDivider from "./ORDivider";
 
 interface RegisterFormProps {
   goToNextStep: () => void;
+  states: RegisterData;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  currentStep: number;
 }
 
-const RegisterForm: FC<RegisterFormProps> = ({ goToNextStep }) => {
-  const { handleSubmit, handleChange, states, errors } =
-    UseFormAuth<RegisterData>(
-      register,
-      {
-        email: "",
-        password: "",
-        username: "",
-        fullName: "",
-      },
-      RegisterValidator,
-      goToNextStep
-    );
+interface ErrorMessage {
+  errEmail: string;
+  errFullName: string;
+  errUsername: string;
+  errPassword: string;
+}
 
-  const { username, email, password, fullName } = states;
+const RegisterForm: FC<RegisterFormProps> = ({
+  goToNextStep,
+  handleChange,
+  states,
+  currentStep,
+}) => {
+  const [errors, setError] = useState<Partial<RegisterData & ErrorMessage>>();
+  const [message, setMessage] = useState("");
 
-  const [validation, setValidation] = useState<Partial<RegisterData>>({});
-
-  const validating = async (data: "email" | "username") => {
-    const valRes: Partial<RegisterData> = {};
-    if (data.trim() !== "") {
-      const res = await axiosInstance.post("/auth/is-exists", { data });
-      valRes[data] = res.data;
-      console.log("result : ", valRes);
-      setValidation({
-        ...valRes,
+  const validatingEmail = () => {
+    if (!states.email.match(regexpEmail)) {
+      setError({
+        ...errors,
+        email: "not-available",
+        errEmail: "Email address is not valid",
       });
+    } else {
+      setError({
+        ...errors,
+        email: "available",
+        errEmail: "",
+      });
+    }
+  };
+  const validatingFullName = () => {
+    if (!states.fullName.match(regexpFullName)) {
+      setError({
+        ...errors,
+        fullName: "not-available",
+        errFullName: "Full name is not valid",
+      });
+    } else {
+      setError({
+        ...errors,
+        fullName: "available",
+        errFullName: "",
+      });
+    }
+  };
+  const validatingUsername = () => {
+    if (!states.username.match(regexpUsername)) {
+      setError({
+        ...errors,
+        username: "not-available",
+        errUsername: "Username is not valid",
+      });
+    } else {
+      setError({
+        ...errors,
+        username: "available",
+        errUsername: "",
+      });
+    }
+  };
+  const validatingPassword = () => {
+    if (!states.password.match(regExpPassword)) {
+      setError({
+        ...errors,
+        password: "not-available",
+        errPassword:
+          "Password requires 6 characters or more with lowercase, uppercase and number",
+      });
+    } else {
+      setError({
+        ...errors,
+        password: "available",
+        errPassword: "",
+      });
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (
+      errors?.errEmail === "" ||
+      errors?.errFullName === "" ||
+      errors?.errPassword === "" ||
+      errors?.errUsername === ""
+    ) {
+      try {
+        const resEmail = await axiosInstance.post("/auth/is-exists", {
+          data: states.email,
+        });
+        console.log("res email data : ", resEmail.data);
+
+        const resUsername = await axiosInstance.post("/auth/is-exists", {
+          data: states.username,
+        });
+        if (resEmail.data !== "ok") {
+          setMessage("Email has been registered");
+          setError({
+            ...errors,
+            email: "not-available",
+          });
+        } else if (resUsername.data !== "ok") {
+          setMessage("Username has been registered");
+          setError({
+            ...errors,
+            username: "not-available",
+          });
+        } else {
+          setMessage("");
+          localStorage.setItem(
+            process.env.REACT_APP_LS_KEY_REG_DATA ?? "",
+            JSON.stringify({ ...states })
+          );
+          goToNextStep();
+          localStorage.setItem(
+            process.env.REACT_APP_LS_KEY_STEP ?? "",
+            JSON.stringify({ step: 1 })
+          );
+        }
+      } catch (error) {
+        setMessage("Server Error");
+      }
     }
   };
 
@@ -53,58 +156,76 @@ const RegisterForm: FC<RegisterFormProps> = ({ goToNextStep }) => {
       </AuthTitle>
       <Text>Sign up to see photos and videos from your friends.</Text>
       <FacebookButton isRegisterPage={true} />
-      <OrTextWrapper>
-        <OrText>OR</OrText>
-      </OrTextWrapper>
+      <OrDivider />
       <form onSubmit={handleSubmit}>
         <AuthInput
+          autoComplete="off"
           isWithValidation={true}
-          validationResult={validation.email}
+          validationResult={errors?.email}
           label="Email"
           name="email"
-          value={email}
+          value={states.email}
           handleChange={handleChange}
           type="text"
-          error={errors?.email}
-          onKeyUp={() => validating("email")}
+          error={errors?.errEmail}
+          onBlur={validatingEmail}
         />
         <VSpacer aa_length="8px" />
         <AuthInput
+          autoComplete="off"
+          validationResult={errors?.fullName}
           isWithValidation={true}
           label="Full Name"
           name="fullName"
-          value={fullName}
+          value={states.fullName}
           handleChange={handleChange}
           type="text"
-          error={errors?.fullName}
+          error={errors?.errFullName}
+          onBlur={validatingFullName}
         />
         <VSpacer aa_length="8px" />
         <AuthInput
+          autoComplete="off"
+          isWithValidation={true}
+          validationResult={errors?.username}
           label="Username"
           name="username"
-          value={username}
+          value={states.username}
           handleChange={handleChange}
           type="text"
-          error={errors?.username}
+          error={errors?.errUsername}
+          onBlur={validatingUsername}
         />
         <VSpacer aa_length="8px" />
         <AuthInput
+          autoComplete="off"
+          isWithValidation={true}
+          validationResult={errors?.password}
           label="Password"
           name="password"
-          value={password}
+          value={states.password}
           handleChange={handleChange}
           type="password"
-          error={errors?.password}
+          error={errors?.errPassword}
+          onKeyUp={validatingPassword}
         />
-
         <VSpacer aa_length="15px" />
         <Button
-          disabled={username === "" || email === "" || password === ""}
+          disabled={
+            states.username === "" ||
+            states.email === "" ||
+            states.password === "" ||
+            errors?.errEmail !== "" ||
+            errors?.errFullName !== "" ||
+            errors?.errPassword !== "" ||
+            errors?.errUsername !== ""
+          }
           aa_isFullWidth
           type="submit"
         >
           Sign Up
         </Button>
+        {<ErrorText>{message}</ErrorText>}
       </form>
       <SmallText>
         By signing up, you agree to our <span>Terms</span> ,{" "}
@@ -116,6 +237,12 @@ const RegisterForm: FC<RegisterFormProps> = ({ goToNextStep }) => {
 };
 
 export default RegisterForm;
+
+const ErrorText = styled.p`
+  text-align: center;
+  color: var(--red);
+  margin: 10px 0;
+`;
 
 const Text = styled.p`
   text-align: center;

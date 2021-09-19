@@ -4,12 +4,14 @@ export interface AuthState {
   loadingAuth: boolean;
   isAuthenticated: boolean;
   requestStatus?: boolean;
+  isRedirectToLoginPage: boolean;
 }
 
 const initialState: AuthState = {
   loadingAuth: false,
   isAuthenticated: false,
   requestStatus: undefined,
+  isRedirectToLoginPage: false,
 };
 
 const AuthReducer = (
@@ -17,6 +19,12 @@ const AuthReducer = (
   action: AuthActionsType
 ): AuthState => {
   switch (action.type) {
+    case "REDIRECT_TO_LOGIN":
+      return {
+        ...state,
+        isRedirectToLoginPage: true,
+        loadingAuth: false,
+      };
     case "STOP_LOADING_AUTH":
       return {
         ...state,

@@ -86,29 +86,6 @@ export const AuthWrapper2 = styled.div`
   height: 584px;
 `;
 
-export const OrTextWrapper = styled.div`
-  margin: 20px 0px;
-  width: 100%;
-  height: 1px;
-  background-color: #ccc;
-  position: relative;
-`;
-
-interface OrTextProps {
-  aa_bg?: string;
-}
-export const OrText = styled.span<OrTextProps>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: ${(props) => props.aa_bg || "#fff"};
-  padding: 0 1rem;
-  color: #777777;
-  font-size: 14px;
-  font-weight: 600;
-`;
-
 export const FormAuth = styled.div`
   display: flex;
   align-items: center;

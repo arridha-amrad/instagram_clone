@@ -19,7 +19,6 @@ const VerificationSchema = new mongoose.Schema<
     code: {
       type: String,
       required: true,
-      unique: true,
     },
     email: {
       type: String,

@@ -10,9 +10,11 @@ interface AuthInputProps {
   name: string;
   error?: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyUp?: any;
+  onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   isWithValidation?: boolean;
   validationResult?: any;
+  autoComplete?: "off" | "on";
 }
 
 const AuthInput: React.FC<AuthInputProps> = ({
@@ -23,13 +25,13 @@ const AuthInput: React.FC<AuthInputProps> = ({
   type,
   handleChange,
   onKeyUp = undefined,
+  onBlur = undefined,
   isWithValidation = false,
+  autoComplete = "on",
   validationResult,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  console.log("validation result : ", validationResult);
 
   return (
     <>
@@ -64,9 +66,11 @@ const AuthInput: React.FC<AuthInputProps> = ({
               : "password"
           }
           name={name}
+          autoComplete={autoComplete}
           isFloat={!!value}
           value={value}
           onKeyUp={onKeyUp}
+          onBlur={onBlur}
           onChange={handleChange}
         />
         <Label onClick={() => inputRef.current?.focus()} isFloat={!!value}>
@@ -102,6 +106,7 @@ const InValidIcon = styled.i`
 export const InputField = styled.div`
   display: flex;
   align-items: center;
+  background-color: var(--greyBG);
   z-index: 0;
   width: 100%;
   flex-grow: 1;

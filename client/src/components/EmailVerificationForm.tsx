@@ -7,35 +7,55 @@ import { VerifyEmailValidator } from "../validators/AuthValidator";
 import AuthInput from "./auth/input/AuthInput";
 import { AuthTitle } from "./AuthPage";
 import EnvelopeIcon from "../icons/email.svg";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
+import MyAlert from "./alert/MyAlert";
 
-interface EmailVerificationProps {
-  goToBackStep: () => void;
-}
+interface EmailVerificationProps {}
 
-const EmailVerification: React.FC<EmailVerificationProps> = ({
-  goToBackStep,
-}) => {
-  const { errors, loadingAuth, handleChange, handleSubmit, states } =
+const EmailVerification: React.FC<EmailVerificationProps> = () => {
+  const [email, setEmail] = useState("");
+
+  const { errors, loadingAuth, handleChange, handleSubmit, states, setState } =
     UseFormAuth<VerifyEmailData>(
       verifyEmail,
-      { verificationCode: "" },
+      {
+        verificationCode: "",
+        email: "",
+      },
       VerifyEmailValidator
     );
-  const { verificationCode } = states;
+
   const { messages } = useSelector((state: RootState) => state.message);
+
+  const { verificationCode } = states;
+
+  useEffect(() => {
+    if (localStorage.getItem(process.env.REACT_APP_LS_KEY_EMAIL ?? "")) {
+      const data = localStorage.getItem(
+        process.env.REACT_APP_LS_KEY_EMAIL ?? ""
+      );
+      if (data) {
+        setEmail(data);
+        setState({
+          ...states,
+          email: data,
+        });
+      }
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <AuthTitle>
         <img src={EnvelopeIcon} alt="envelope" />
         <p className="title">Enter Confirmation Code</p>
-        {messages.map((message) => (
-          <p key={message.id} className="info">
-            {message.text}
-            <span>Resend Code.</span>
-          </p>
-        ))}
+        <p className="info">
+          Enter the confirmation code we sent to {email}.
+          <span>&nbsp;Resend Code.</span>
+        </p>
       </AuthTitle>
       <VSpacer aa_length="20px" />
 
@@ -57,12 +77,17 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           {loadingAuth ? "loading..." : "Next"}
         </Button>
       </form>
-
-      <VSpacer />
-      <Button aa_bg="#fff" aa_color="#03a9f4" onClick={() => goToBackStep()}>
-        Go Back
-      </Button>
-      <VSpacer />
+      {messages.length > 0 ? (
+        messages.map((message) => (
+          <MyAlert
+            key={message.id}
+            message={message.text}
+            type={message.type}
+          />
+        ))
+      ) : (
+        <VSpacer aa_length="30px" />
+      )}
     </>
   );
 };
