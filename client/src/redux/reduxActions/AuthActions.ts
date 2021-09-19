@@ -2,10 +2,8 @@ import { Dispatch } from "redux";
 import { AuthActionsType } from "../reduxTypes/AuthTypes";
 import axiosInstance from "../../utils/AxiosInterceptors";
 import {
-  BirthDayData,
   ForgotPasswordData,
   LoginData,
-  RegisterData,
   ResetPasswordData,
   VerifyEmailData,
 } from "../../dto/AuthDTO";
@@ -59,25 +57,6 @@ export const login =
         type: "LOGIN_SUCCESS",
       });
       localStorage.setItem("data", "login");
-    } catch (err: any) {
-      dispatch({
-        type: "AUTH_ERROR",
-      });
-      dispatchMessage(dispatch, err.response.data.message, "danger");
-    }
-  };
-
-export const register =
-  (registrationData: RegisterData) =>
-  async (dispatch: Dispatch<AuthActionsType>): Promise<void> => {
-    dispatchRequiredActions(dispatch);
-    try {
-      const res = await axiosInstance.post("/auth/register", registrationData);
-      dispatch({
-        type: "AUTH_SUCCESS",
-      });
-      dispatchMessage(dispatch, res.data, "info");
-      console.log("data", registrationData);
     } catch (err: any) {
       dispatch({
         type: "AUTH_ERROR",

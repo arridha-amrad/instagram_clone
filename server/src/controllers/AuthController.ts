@@ -128,6 +128,7 @@ export const emailVerificationHandler = async (
       const user = await UserServices.findUserByIdAndUpdate(verification.user, {
         isVerified: true,
         isActive: true,
+        jwtVersion: v4(),
         requiredAuthAction: RequiredAuthAction.null,
       });
       if (user) {
@@ -179,7 +180,7 @@ export const loginHandler = async (
       const encryptedRefreshToken = encrypt(refreshToken);
       // store refreshToken to redis
       await redis.set(`${user._id}_refToken`, encryptedRefreshToken);
-      return responseWithCookie(res, encryptedAccessToken, user);
+      return responseWithCookie(res, encryptedAccessToken, user._id);
     }
   } catch (err) {
     console.log(err);

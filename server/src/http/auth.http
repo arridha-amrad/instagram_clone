@@ -32,8 +32,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "identity": "arridha",
-  "password": "123"
+  "identity": "amrad21",
+  "password": "Iambillionaire99"
 }
 
 ### Logout

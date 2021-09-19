@@ -21,7 +21,6 @@ interface RegisterFormProps {
   goToNextStep: () => void;
   states: RegisterData;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  currentStep: number;
 }
 
 interface ErrorMessage {
@@ -35,7 +34,6 @@ const RegisterForm: FC<RegisterFormProps> = ({
   goToNextStep,
   handleChange,
   states,
-  currentStep,
 }) => {
   const [errors, setError] = useState<Partial<RegisterData & ErrorMessage>>();
   const [message, setMessage] = useState("");

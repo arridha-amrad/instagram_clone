@@ -14,9 +14,9 @@ export interface IUserModel {
   role: string;
   birthDay: string;
   // optional
-  isActive?: boolean;
-  isLogin?: boolean;
-  isVerified?: boolean;
+  isActive: boolean;
+  isLogin: boolean;
+  isVerified: boolean;
   // setup by mongoDB
   createdAt: Date;
   updatedAt: Date;

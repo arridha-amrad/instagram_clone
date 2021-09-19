@@ -1,9 +1,9 @@
+import { LoginResponse } from './../dto/AuthData';
 import { NextFunction, Request, Response } from 'express';
 import { HTTP_CODE } from '../enums/HTTP_CODE';
 import { responseSuccess } from '../ServerResponse';
 import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
-import { FetchedUserResponse } from '../dto/AuthData';
 
 export const me = async (
   req: Request,
@@ -13,11 +13,31 @@ export const me = async (
   try {
     const data = await UserService.findUserById(req.userId);
     if (data) {
-      const user: FetchedUserResponse = {
-        username: data.username,
-        email: data.email,
-        createdAt: data.createdAt,
-        isLogin: data.isLogin,
+      const {
+        _id,
+        birthDay,
+        createdAt,
+        email,
+        fullName,
+        isActive,
+        isLogin,
+        isVerified,
+        role,
+        updatedAt,
+        username,
+      } = data;
+      const user: LoginResponse = {
+        _id,
+        birthDay,
+        fullName,
+        isActive,
+        isVerified,
+        role,
+        updatedAt,
+        username,
+        email,
+        createdAt,
+        isLogin,
       };
       return responseSuccess(res, HTTP_CODE.OK, user);
     }

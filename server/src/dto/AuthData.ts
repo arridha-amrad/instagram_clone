@@ -9,7 +9,10 @@ export type RegisterRequest = Pick<
   'username' | 'email' | 'password'
 >;
 
-export type LoginResponse = Pick<IUserModel, 'email' | 'username' | '_id'>;
+export type LoginResponse = Omit<
+  IUserModel,
+  'password' | 'strategy' | 'requiredAuthAction' | 'jwtVersion'
+>;
 
 export type FetchedUserResponse = Pick<
   IUserModel,

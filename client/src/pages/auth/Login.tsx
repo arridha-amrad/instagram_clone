@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/Store";
 import { MyLink } from "../../styled-components/link-el";
 import OrDivider from "../../components/ORDivider";
+import { useHistory } from "react-router";
+import { useEffect } from "react";
 
 const Login = () => {
   const { errors, handleChange, handleSubmit, loadingAuth, states } =
@@ -28,6 +30,16 @@ const Login = () => {
   const { password, identity } = states;
 
   const { messages } = useSelector((state: RootState) => state.message);
+
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (isAuthenticated && !loadingAuth) {
+      history.push("/home");
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated, loadingAuth]);
 
   return (
     <AuthPage
@@ -76,6 +88,7 @@ const Login = () => {
       {messages.map((message) => (
         <MyAlert key={message.id} message={message.text} type={message.type} />
       ))}
+
       <MyLink to="/forgot-password">Forgot password?</MyLink>
       <VSpacer aa_length="20px" />
     </AuthPage>

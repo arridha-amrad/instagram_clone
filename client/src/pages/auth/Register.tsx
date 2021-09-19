@@ -20,7 +20,6 @@ const Register = () => {
   const steps = ["register", "setBirthDay", "emailVerification"];
   const [currentStep, setCurrentStep] = useState(0);
   const goToNextStep = () => setCurrentStep((val) => val + 1);
-  const goToBackStep = () => setCurrentStep((val) => val - 1);
 
   const [loading, setLoading] = useState(false);
 
@@ -130,7 +129,6 @@ const Register = () => {
         <RegisterForm
           handleChange={handleChange}
           states={states}
-          currentStep={currentStep}
           goToNextStep={goToNextStep}
         />
       ) : (
