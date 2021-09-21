@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import AppAndWebsites from "./pages/accounts/AppWebsite";
@@ -20,6 +20,9 @@ import UserSaved from "./pages/user/UserSaved";
 import UserIGTV from "./pages/user/UserIGTV";
 import UserPost from "./pages/user/UserPosts";
 import Home from "./pages/Home";
+import axiosInstance from "./utils/AxiosInterceptors";
+import { useDispatch } from "react-redux";
+import { getLoginUserData } from "./redux/reduxActions/AuthActions";
 
 interface AppProps {}
 
@@ -37,6 +40,17 @@ const themes = {
 };
 
 const App: React.FC<AppProps> = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (localStorage.getItem("data") === "login") {
+      axiosInstance
+        .get("/auth/refresh-token")
+        .then(() => dispatch(getLoginUserData()))
+        .catch((err: any) => console.log(err));
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={themes["light"]}>

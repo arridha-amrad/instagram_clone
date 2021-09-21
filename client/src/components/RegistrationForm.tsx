@@ -14,7 +14,7 @@ import FacebookButton from "./auth/FacebookButton";
 import { FC, useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "../utils/AxiosInterceptors";
-import { ChangeEvent, FormEvent } from "react-router/node_modules/@types/react";
+import { ChangeEvent, FormEvent } from "react";
 import OrDivider from "./ORDivider";
 
 interface RegisterFormProps {

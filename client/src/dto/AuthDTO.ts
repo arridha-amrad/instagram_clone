@@ -1,12 +1,20 @@
-export interface AuthData {
+interface AuthData {
+  _id: string;
   username: string;
+  fullName: string;
   email: string;
   password: string;
-  fullName: string;
-  confirmPassword: string;
-  identity: string;
-  isLogin: boolean;
+  role: string;
   birthDay: string;
+  // optional
+  isActive: boolean;
+  isLogin: boolean;
+  isVerified: boolean;
+  identity: string;
+  confirmPassword: string;
+  // setup by mongoDB
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface BirthDayData {
@@ -34,4 +42,7 @@ export type ResetPasswordData = Pick<
   "password" | "confirmPassword"
 > & { token: string };
 
-export type SetUserData = Pick<AuthData, "email" | "username" | "isLogin">;
+export type AuthenticatedUserData = Omit<
+  AuthData,
+  "identity" | "confirmPassword" | "password"
+>;

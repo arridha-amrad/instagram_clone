@@ -23,6 +23,19 @@ const dispatchMessage = (
   dispatch(messageActions.setMessage(message, type));
 };
 
+export const getLoginUserData =
+  () => async (dispatch: Dispatch<AuthActionsType>) => {
+    try {
+      const result = await axiosInstance.get("/user/me");
+      dispatch({
+        type: "AUTHENTICATED_USER_DATA",
+        payload: result.data,
+      });
+    } catch (err: any) {
+      console.log(err.response.data);
+    }
+  };
+
 export const verifyEmail =
   (data: VerifyEmailData) => async (dispatch: Dispatch<AuthActionsType>) => {
     dispatchRequiredActions(dispatch);

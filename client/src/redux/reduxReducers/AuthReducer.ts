@@ -1,3 +1,4 @@
+import { AuthenticatedUserData } from "../../dto/AuthDTO";
 import { AuthActionsType } from "../reduxTypes/AuthTypes";
 
 export interface AuthState {
@@ -5,6 +6,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   requestStatus?: boolean;
   isRedirectToLoginPage: boolean;
+  authenticatedUser: AuthenticatedUserData | {};
 }
 
 const initialState: AuthState = {
@@ -12,6 +14,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   requestStatus: undefined,
   isRedirectToLoginPage: false,
+  authenticatedUser: {},
 };
 
 const AuthReducer = (
@@ -19,6 +22,11 @@ const AuthReducer = (
   action: AuthActionsType
 ): AuthState => {
   switch (action.type) {
+    case "AUTHENTICATED_USER_DATA":
+      return {
+        ...state,
+        authenticatedUser: { ...action.payload },
+      };
     case "REDIRECT_TO_LOGIN":
       return {
         ...state,
