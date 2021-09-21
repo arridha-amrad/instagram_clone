@@ -13,6 +13,8 @@ export interface IUserModel {
   jwtVersion: string;
   role: string;
   birthDay: string;
+  details: Schema.Types.ObjectId;
+  verification: Schema.Types.ObjectId;
   // optional
   isActive: boolean;
   isLogin: boolean;
@@ -79,6 +81,14 @@ const UserSchema = new mongoose.Schema<
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    details: {
+      type: Schema.Types.ObjectId,
+      ref: 'UserDetails',
+    },
+    verification: {
+      type: Schema.Types.ObjectId,
+      ref: 'Verification',
     },
   },
   { timestamps: true },

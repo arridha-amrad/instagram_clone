@@ -1,9 +1,9 @@
-import { LoginResponse } from './../dto/AuthData';
 import { NextFunction, Request, Response } from 'express';
 import { HTTP_CODE } from '../enums/HTTP_CODE';
 import { responseSuccess } from '../ServerResponse';
 import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
+import * as UserDetailsService from '../services/UserDetailsService';
 
 export const me = async (
   req: Request,
@@ -12,35 +12,26 @@ export const me = async (
 ): Promise<void> => {
   try {
     const data = await UserService.findUserById(req.userId);
-    if (data) {
-      const {
-        _id,
-        birthDay,
-        createdAt,
-        email,
-        fullName,
-        isActive,
-        isLogin,
-        isVerified,
-        role,
-        updatedAt,
-        username,
-      } = data;
-      const user: LoginResponse = {
-        _id,
-        birthDay,
-        fullName,
-        isActive,
-        isVerified,
-        role,
-        updatedAt,
-        username,
-        email,
-        createdAt,
-        isLogin,
-      };
-      return responseSuccess(res, HTTP_CODE.OK, user);
-    }
+    return responseSuccess(res, HTTP_CODE.OK, data);
+  } catch (err) {
+    console.log(err);
+    next(new ServerErrorException());
+  }
+};
+
+export const addUserDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const result = await UserDetailsService.findOneAndUpdate(
+      req.cookies.COOKIE_ID,
+      {
+        ...req.body,
+      },
+    );
+    return responseSuccess(res, HTTP_CODE.OK, result);
   } catch (err) {
     console.log(err);
     next(new ServerErrorException());

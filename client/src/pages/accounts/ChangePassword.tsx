@@ -5,17 +5,24 @@ import AccountInput from "../../components/accounts/form/input";
 import AccountLink from "../../components/accounts/form/link";
 import AccountProfile from "../../components/accounts/profile/AccountProfile";
 
-interface ChangePasswordProps { }
+interface ChangePasswordProps {}
 
 const ChangePassword: React.FC<ChangePasswordProps> = () => {
   document.title = "Change Password";
   return (
     <AccountContainer>
-      <AccountProfile imgUrl="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/1200px-SpongeBob_SquarePants_character.svg.png" username="squarepants" />
+      <AccountProfile
+        imgUrl="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/1200px-SpongeBob_SquarePants_character.svg.png"
+        username="squarepants"
+      />
       <form>
-        <AccountInput inputSize="big" labelStr="Old Password" name="oldPassword" />
-        <AccountInput inputSize="big" labelStr="New Password" name="newPassword" />
-        <AccountInput inputSize="big" labelStr="Confirm Password" name="confirmPassword" />
+        <AccountInput inputSize="big" label="Old Password" name="oldPassword" />
+        <AccountInput inputSize="big" label="New Password" name="newPassword" />
+        <AccountInput
+          inputSize="big"
+          label="Confirm Password"
+          name="confirmPassword"
+        />
         <AccountButton text="Change Password" />
       </form>
       <AccountLink link="/forgot-password" text="Forgot Password" />

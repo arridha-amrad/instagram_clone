@@ -4,9 +4,9 @@ import { AuthActionsType } from "../reduxTypes/AuthTypes";
 export interface AuthState {
   loadingAuth: boolean;
   isAuthenticated: boolean;
-  requestStatus?: boolean;
   isRedirectToLoginPage: boolean;
-  authenticatedUser: AuthenticatedUserData | {};
+  requestStatus?: boolean;
+  authenticatedUser?: AuthenticatedUserData;
 }
 
 const initialState: AuthState = {
@@ -14,7 +14,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   requestStatus: undefined,
   isRedirectToLoginPage: false,
-  authenticatedUser: {},
+  authenticatedUser: undefined,
 };
 
 const AuthReducer = (

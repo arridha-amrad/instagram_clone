@@ -23,7 +23,8 @@ PUT http://localhost:5000/api/auth/verify-email
 Content-Type: application/json
 
 {
-  "verificationCode": "009490"
+  "verificationCode": "478102",
+  "email": "arridhaamrad@gmail.com"
 }
 
 
@@ -32,16 +33,12 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "identity": "amrad21",
-  "password": "Iambillionaire99"
+  "identity": "arridha2108",
+  "password": "123456"
 }
 
 ### Logout
 POST  http://localhost:5000/api/auth/logout
-
-
-### Refresh Token
-GET http://localhost:5000/api/auth/refresh-token
 
 
 ### Forgot Password
@@ -62,9 +59,24 @@ Content-Type: application/json
 }
 
 
+### Refresh Token
+GET http://localhost:5000/api/auth/refresh-token
+
+
 ### Me
 GET http://localhost:5000/api/user/me
 
+
+### Add User details
+
+POST http://localhost:5000/api/user/user-details
+Content-Type: application/json
+
+{
+  "bio": "I'm programmer",
+  "website": "",
+  "phoneNumber": "081248580788"
+}
 
 
 ###

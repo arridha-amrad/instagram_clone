@@ -30,6 +30,7 @@ import { LoginRequest, RegisterRequest } from '../dto/AuthData';
 import { generateNumber } from '../utils/RandomNumberGenerator';
 import * as VerificationServices from '../services/VerificationService';
 import { IVerificationModel } from '../models/VerificationModel';
+import * as UserDetailsService from '../services/UserDetailsService';
 
 export const isExists = async (
   req: Request,
@@ -175,6 +176,7 @@ export const loginHandler = async (
     await UserServices.findUserByIdAndUpdate(user._id, { isLogin: true });
     const accessToken = await JwtService.signAccessToken(user);
     const refreshToken = await JwtService.signRefreshToken(user);
+
     if (accessToken && refreshToken) {
       const encryptedAccessToken = encrypt(accessToken);
       const encryptedRefreshToken = encrypt(refreshToken);
@@ -220,6 +222,8 @@ export const refreshTokenHandler = async (
 ): Promise<void> => {
   try {
     const cookieId = req.cookies.COOKIE_ID;
+    console.log('cookie ID', cookieId);
+
     const encryptedRefreshToken = await redis.get(`${cookieId}_refToken`);
     const bearerRefreshToken = decrypt(encryptedRefreshToken ?? '');
     const token = bearerRefreshToken.split(' ')[1];
