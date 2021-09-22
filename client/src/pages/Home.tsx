@@ -14,7 +14,7 @@ import {
   SuggestionBox,
 } from "../components/home/home.elements";
 
-interface HomeProps { }
+interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   return (

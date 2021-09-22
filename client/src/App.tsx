@@ -69,6 +69,7 @@ const App: React.FC<AppProps> = () => {
     }
     // eslint-disable-next-line
   }, []);
+
   if (loading) {
     return <Loading />;
   } else {
@@ -82,7 +83,7 @@ const App: React.FC<AppProps> = () => {
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/reset-password" component={ResetPassword} />
             <SecureRoute exact path="/home" component={Home} />
-            <SecureRoute exact path="/user/post" component={UserPost} />
+            <SecureRoute exact path="/:username" component={UserPost} />
             <SecureRoute exact path="/user/igtv" component={UserIGTV} />
             <SecureRoute exact path="/user/saved" component={UserSaved} />
             <SecureRoute exact path="/user/tagged" component={UserTag} />

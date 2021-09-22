@@ -1,28 +1,11 @@
 import { AnyAction } from "redux";
+import { UserData } from "../../dto/AuthDTO";
 import * as types from "../reduxTypes/UserTypes";
 
-export interface UserState {
-  _id: string | null;
-  createdAt: string | null;
-  email: string | null;
-  updatedAt: string | null;
-  username: string | null;
-  loadingUser: boolean;
-  isActive: boolean;
-  isLogin: boolean;
-  isVerified: boolean;
-}
+export type UserState = Partial<UserData> & { loadingUser: boolean };
 
 const initialState: UserState = {
   loadingUser: false,
-  _id: null,
-  createdAt: null,
-  email: null,
-  isActive: false,
-  isLogin: false,
-  isVerified: false,
-  updatedAt: null,
-  username: null,
 };
 
 const UserReducer = (state = initialState, action: AnyAction): UserState => {
@@ -37,7 +20,6 @@ const UserReducer = (state = initialState, action: AnyAction): UserState => {
         ...state,
         loadingUser: false,
       };
-
     case types.SET_USER_SUCCESS:
       return {
         ...state,

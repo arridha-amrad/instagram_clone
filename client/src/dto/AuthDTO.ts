@@ -25,13 +25,6 @@ interface AuthData {
   confirmPassword: string;
 }
 
-interface UserDetails {
-  website: string;
-  bio: string;
-  phoneNumber: string;
-  gender: string;
-}
-
 export interface BirthDayData {
   date: string;
   month: string;
@@ -60,5 +53,9 @@ export type ResetPasswordData = Pick<
 export type AuthenticatedUserData = Omit<
   AuthData,
   "identity" | "confirmPassword" | "password"
-> &
-  Partial<UserDetails>;
+>;
+
+export type UserData = Omit<
+  AuthenticatedUserData,
+  "phoneNumber" | "isActive" | "isLogin" | "isVerified" | "gender" | "id"
+>;

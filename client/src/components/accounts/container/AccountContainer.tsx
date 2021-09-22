@@ -4,9 +4,13 @@ import { VSpacer } from "../../../styled-components/spacer-el";
 import AppBar from "../../appbar/Appbar";
 import UserFooter from "../../user/footer/UserFooter";
 import AccountMenu from "../menu/AccountMenu";
-import { AccountsWrapper, AccountsLeft, AccountsRight } from "./AccountContainer.elements";
+import {
+  AccountsWrapper,
+  AccountsLeft,
+  AccountsRight,
+} from "./AccountContainer.elements";
 
-interface AccountContainerProps { }
+interface AccountContainerProps {}
 
 const AccountContainer: React.FC<AccountContainerProps> = ({ children }) => {
   return (
@@ -24,7 +28,7 @@ const AccountContainer: React.FC<AccountContainerProps> = ({ children }) => {
         <UserFooter />
       </MyContainer>
     </>
-  )
-}
+  );
+};
 
-export default AccountContainer
+export default AccountContainer;

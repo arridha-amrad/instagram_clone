@@ -12,7 +12,7 @@ import { Fragment } from "react";
 import MyModalPost from "../../components/user/modal/post/PostModal";
 import UserContainer from "../../components/user/container/UserContainer";
 
-interface UserPostProps { }
+interface UserPostProps {}
 
 const UserPost: React.FC<UserPostProps> = () => {
   const [isShow, setShow] = useState(false);

@@ -23,7 +23,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
           label="Confirm Password"
           name="confirmPassword"
         />
-        <AccountButton text="Change Password" />
+        <AccountButton btnSize="big" text="Change Password" />
       </form>
       <AccountLink link="/forgot-password" text="Forgot Password" />
     </AccountContainer>

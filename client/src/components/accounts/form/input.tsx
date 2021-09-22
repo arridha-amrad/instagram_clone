@@ -7,7 +7,7 @@ interface AccountInputProps {
   name: string;
   type?: string;
   isInputArea?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   value?: string;
   isChecked?: boolean;
 }
@@ -29,8 +29,8 @@ const AccountInput: React.FC<AccountInputProps> = ({
 
       {isInputArea ? (
         <InputArea aa_bigInput={inputSize === "big" ? true : false}>
-          {label === "bio" ? (
-            <textarea name="bio" />
+          {name === "bio" ? (
+            <textarea name="bio" value={value} onChange={onChange} />
           ) : (
             <input name={name} type={type} onChange={onChange} value={value} />
           )}
@@ -118,6 +118,7 @@ const InputArea = styled.div<InputAreaProps>`
     font-size: 15px;
     padding: 8px;
     width: 100%;
+    height: 100px;
     border-radius: 3px;
     border: 1px solid #dbdbdb;
     outline: none;

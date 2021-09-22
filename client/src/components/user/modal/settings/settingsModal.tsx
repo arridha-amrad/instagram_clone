@@ -34,9 +34,6 @@ const SettingsOptions: React.FC<SettingsOptionsProps> = ({ isShow }) => {
         <Divider />
 
         <ButtonLink to="/accounts/change-password">Logout</ButtonLink>
-        <Divider />
-
-        <ButtonLink to="/accounts/change-password">Cancel</ButtonLink>
       </ModalWrapper2>
     </>
   );

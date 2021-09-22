@@ -194,5 +194,3 @@ export const Footer = styled.div`
     line-height: 1.7;
   }
 `;
-
-

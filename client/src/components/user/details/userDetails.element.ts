@@ -83,6 +83,8 @@ export const Bio = styled.p`
   font-size: 16px;
   line-height: 1.7;
   width: 400px;
+  white-space: pre-line;
+  word-wrap: break-word;
 `;
 
 export const Web = styled.p`

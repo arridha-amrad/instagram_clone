@@ -12,4 +12,10 @@ router.post(
   userController.updateUserData,
 );
 
+router.post(
+  '/change-password',
+  verifyAccessToken,
+  userController.changePassword,
+);
+
 export default router;

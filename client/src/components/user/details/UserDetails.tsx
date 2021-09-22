@@ -17,8 +17,10 @@ import {
   PostFollowersFollowingsArea,
 } from "./userDetails.element";
 import { ModalBackground2 } from "../modal/settings/settingsModal.element";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/Store";
 
-interface ProfileDataProps { }
+interface ProfileDataProps {}
 
 const ProfileData: React.FC<ProfileDataProps> = () => {
   const [isShow, setShow] = useState(false);
@@ -44,6 +46,8 @@ const ProfileData: React.FC<ProfileDataProps> = () => {
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
 
+  const { authenticatedUser } = useSelector((state: RootState) => state.auth);
+
   return (
     <>
       <ModalBackground2 isShow={isShow} ref={myRef} onClick={ToggleModal}>
@@ -51,7 +55,7 @@ const ProfileData: React.FC<ProfileDataProps> = () => {
       </ModalBackground2>
 
       <ProfileFirstLine>
-        <ProfileUsername>square_pants</ProfileUsername>
+        <ProfileUsername>{authenticatedUser?.username}</ProfileUsername>
         <EditProfileButton to="/accounts/edit">Edit Profile</EditProfileButton>
         <SettingsIcon
           onClick={() => setShow(true)}
@@ -67,20 +71,17 @@ const ProfileData: React.FC<ProfileDataProps> = () => {
           <span>10</span> post
         </Post>
         <Followers>
-          <span>1.2k</span> followers
+          <span>{authenticatedUser?.followers}</span> followers
         </Followers>
         <Followings>
-          <span>10</span> followings
+          <span>{authenticatedUser?.followings}</span> followings
         </Followings>
       </PostFollowersFollowingsArea>
 
       <AccountDetails>
-        <AccountName>Spongebob</AccountName>
-        <Bio>
-          A yellow sea sponge named SpongeBob SquarePants. He embarks on various
-          adventures with his friends at Bikini Bottom.
-        </Bio>
-        <Web>www.mrsquare.com</Web>
+        <AccountName>{authenticatedUser?.fullName}</AccountName>
+        <Bio>{authenticatedUser?.bio}</Bio>
+        <Web>{authenticatedUser?.website}</Web>
       </AccountDetails>
     </>
   );
