@@ -6,6 +6,10 @@ const router = Router();
 
 router.get('/me', verifyAccessToken, userController.me);
 
-router.post('/user-details', verifyAccessToken, userController.addUserDetails);
+router.post(
+  '/update-user-data',
+  verifyAccessToken,
+  userController.updateUserData,
+);
 
 export default router;

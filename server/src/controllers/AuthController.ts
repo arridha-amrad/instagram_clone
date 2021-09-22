@@ -30,29 +30,6 @@ import { LoginRequest, RegisterRequest } from '../dto/AuthData';
 import { generateNumber } from '../utils/RandomNumberGenerator';
 import * as VerificationServices from '../services/VerificationService';
 import { IVerificationModel } from '../models/VerificationModel';
-import * as UserDetailsService from '../services/UserDetailsService';
-
-export const isExists = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const { data }: { data: string } = req.body;
-    const user = await UserServices.findUserByUsernameOrEmail(data);
-    if (user) {
-      res
-        .status(200)
-        .send(
-          `${data.includes('@') ? 'Email' : 'Username'} has been registered`,
-        );
-    } else {
-      res.status(200).send('ok');
-    }
-  } catch (err) {
-    next(new ServerErrorException());
-  }
-};
 
 export const registerHandler = async (
   req: Request,
@@ -117,8 +94,6 @@ export const emailVerificationHandler = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  console.log('body : ', req.body);
-
   const { verificationCode, email } = req.body;
   try {
     const verification = await VerificationServices.findCodeAndUpdate(
@@ -176,7 +151,6 @@ export const loginHandler = async (
     await UserServices.findUserByIdAndUpdate(user._id, { isLogin: true });
     const accessToken = await JwtService.signAccessToken(user);
     const refreshToken = await JwtService.signRefreshToken(user);
-
     if (accessToken && refreshToken) {
       const encryptedAccessToken = encrypt(accessToken);
       const encryptedRefreshToken = encrypt(refreshToken);
@@ -222,8 +196,6 @@ export const refreshTokenHandler = async (
 ): Promise<void> => {
   try {
     const cookieId = req.cookies.COOKIE_ID;
-    console.log('cookie ID', cookieId);
-
     const encryptedRefreshToken = await redis.get(`${cookieId}_refToken`);
     const bearerRefreshToken = decrypt(encryptedRefreshToken ?? '');
     const token = bearerRefreshToken.split(' ')[1];

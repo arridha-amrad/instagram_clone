@@ -24,11 +24,11 @@ import axiosInstance from "./utils/AxiosInterceptors";
 import { useDispatch } from "react-redux";
 import { getLoginUserData } from "./redux/reduxActions/AuthActions";
 import Loading from "./components/Loading";
-import SecureRoute from "./utils/SecureRoute";
 import {
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
 } from "./redux/reduxTypes/AuthTypes";
+import SecureRoute from "./components/SecureRoute";
 
 interface AppProps {}
 

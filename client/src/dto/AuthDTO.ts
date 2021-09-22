@@ -3,18 +3,26 @@ interface AuthData {
   username: string;
   fullName: string;
   email: string;
-  password: string;
   role: string;
   birthDay: string;
-  // optional
+  website: string;
+  bio: string;
+  phoneNumber: string;
+  gender: string;
+  followings: number;
+  followers: number;
+  imageURL: string;
   isActive: boolean;
   isLogin: boolean;
   isVerified: boolean;
-  identity: string;
-  confirmPassword: string;
   // setup by mongoDB
   createdAt: Date;
   updatedAt: Date;
+  identity: string;
+
+  // hide from  client
+  password: string;
+  confirmPassword: string;
 }
 
 interface UserDetails {

@@ -18,7 +18,6 @@ const AccountButton: React.FC<AccountButtonProps> = ({
         <Button
           aa_fontSize="15px"
           aa_width={btnSize === "big" ? "150px" : "70px"}
-          disabled
           type="submit"
         >
           {text}

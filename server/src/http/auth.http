@@ -23,7 +23,7 @@ PUT http://localhost:5000/api/auth/verify-email
 Content-Type: application/json
 
 {
-  "verificationCode": "478102",
+  "verificationCode": "375313",
   "email": "arridhaamrad@gmail.com"
 }
 
@@ -69,13 +69,14 @@ GET http://localhost:5000/api/user/me
 
 ### Add User details
 
-POST http://localhost:5000/api/user/user-details
+POST http://localhost:5000/api/user/update-user-data
 Content-Type: application/json
 
 {
-  "bio": "I'm programmer",
-  "website": "",
-  "phoneNumber": "081248580788"
+  "bio": "I'm software engineer",
+  "website": "ai.com",
+  "phoneNumber": "0000",
+  "followers": 0
 }
 
 

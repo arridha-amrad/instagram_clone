@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AccountContainer from "../../components/accounts/container/AccountContainer";
 import AccountButton from "../../components/accounts/form/button";
 import AccountInput from "../../components/accounts/form/input";
 import AccountProfile from "../../components/accounts/profile/AccountProfile";
+import MyAlert from "../../components/alert/MyAlert";
 import { AuthenticatedUserData } from "../../dto/AuthDTO";
+import { updateUserData } from "../../redux/reduxActions/AuthActions";
 import { RootState } from "../../redux/Store";
 
 interface EditProfileProps {}
@@ -12,10 +14,10 @@ interface EditProfileProps {}
 const EditProfile: React.FC<EditProfileProps> = () => {
   document.title = "Edit Profile - Instagram";
   const user = useSelector((state: RootState) => state.auth.authenticatedUser);
+  const { messages } = useSelector((state: RootState) => state.message);
+  const dispatch = useDispatch();
 
-  const [authenticatedUser, setAuthenticatedUser] = useState<
-    Partial<AuthenticatedUserData>
-  >({
+  const [states, setStates] = useState<Partial<AuthenticatedUserData>>({
     email: "",
     username: "",
     fullName: "",
@@ -26,8 +28,8 @@ const EditProfile: React.FC<EditProfileProps> = () => {
   });
 
   useEffect(() => {
-    setAuthenticatedUser({
-      ...authenticatedUser,
+    setStates({
+      ...states,
       email: user?.email,
       username: user?.username,
       fullName: user?.fullName,
@@ -39,21 +41,24 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     // eslint-disable-next-line
   }, []);
 
-  const [state] = useState({
-    bio: "",
-  });
-  // const handleChange = (e: any) => {
-  //   setState({
-  //     ...state,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setStates({
+      ...states,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(state.bio);
+    console.log(states);
+    dispatch(updateUserData(states));
   };
+
   const { email, username, fullName, website, phoneNumber, bio, gender } =
-    authenticatedUser;
+    states;
+
   return (
     <AccountContainer>
       <AccountProfile
@@ -62,44 +67,68 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         enableChangeProfile={true}
       />
       <form onSubmit={handleSubmit}>
-        <AccountInput value={fullName ?? ""} label="Name" name="fullName">
+        <AccountInput
+          onChange={handleChange}
+          value={fullName ?? ""}
+          label="Name"
+          name="fullName"
+        >
           <p>
             Help people discover your account by using the name you're known by:
             either your full name, nickname, or business name.
           </p>
           <p>You can only change your name twice within 14 days.</p>
         </AccountInput>
-        <AccountInput value={username ?? ""} label="Username" name="username" />
-        <AccountInput value={website ?? ""} label="Website" name="website" />
-        <AccountInput value={bio ?? ""} label="Bio" name="bio">
+        <AccountInput
+          onChange={handleChange}
+          value={username ?? ""}
+          label="Username"
+          name="username"
+        />
+        <AccountInput
+          onChange={handleChange}
+          value={website ?? ""}
+          label="Website"
+          name="website"
+        />
+        <AccountInput
+          onChange={handleChange}
+          value={bio ?? ""}
+          label="Bio"
+          name="bio"
+        >
           <p>
             <span>Personal Information</span> Provide your personal information,
             even if the account is used for a business, a pet or something else.
             This won't be a part of your public profile.
           </p>
         </AccountInput>
-        <AccountInput value={email ?? ""} label="Email" name="email" />
         <AccountInput
+          onChange={handleChange}
+          value={email ?? ""}
+          label="Email"
+          name="email"
+        />
+        <AccountInput
+          onChange={handleChange}
           value={phoneNumber ?? ""}
           label="Phone Number"
           name="phoneNumber"
         />
-        <AccountInput value={gender ?? ""} label="Gender" name="gender" />
         <AccountInput
-          label="Similar Account Suggestions"
-          name="accountSuggestion"
-          isInputArea={false}
-          isChecked={false}
-        >
-          <p>
-            Include your account when recommending similar accounts people might
-            want to follow.
-          </p>
-        </AccountInput>
+          onChange={handleChange}
+          value={gender ?? ""}
+          label="Gender"
+          name="gender"
+        />
         <AccountButton text="Submit" btnSize="small">
           <p>Temporarily disable my account</p>
         </AccountButton>
       </form>
+
+      {messages.map((message) => (
+        <MyAlert message={message.text} type={message.type} />
+      ))}
     </AccountContainer>
   );
 };

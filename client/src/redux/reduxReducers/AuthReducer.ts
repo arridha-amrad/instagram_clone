@@ -22,6 +22,13 @@ const AuthReducer = (
   action: AuthActionsType
 ): AuthState => {
   switch (action.type) {
+    case "UPDATE_USER_DATA":
+      return {
+        ...state,
+        authenticatedUser: { ...action.payload },
+        loadingAuth: false,
+        requestStatus: true,
+      };
     case "AUTHENTICATED_USER_DATA":
       return {
         ...state,

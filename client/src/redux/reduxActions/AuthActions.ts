@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { AuthActionsType } from "../reduxTypes/AuthTypes";
 import axiosInstance from "../../utils/AxiosInterceptors";
 import {
+  AuthenticatedUserData,
   ForgotPasswordData,
   LoginData,
   ResetPasswordData,
@@ -22,6 +23,19 @@ const dispatchMessage = (
 ) => {
   dispatch(messageActions.setMessage(message, type));
 };
+
+export const updateUserData =
+  (data: Partial<AuthenticatedUserData>) =>
+  async (dispatch: Dispatch<AuthActionsType>) => {
+    dispatchRequiredActions(dispatch);
+    try {
+      const result = await axiosInstance.post("/user/update-user-data", data);
+      dispatchMessage(dispatch, "Saved", "success");
+      dispatch({ type: "UPDATE_USER_DATA", payload: result.data });
+    } catch (err: any) {
+      console.log(err.response.data);
+    }
+  };
 
 export const getLoginUserData =
   () => async (dispatch: Dispatch<AuthActionsType>) => {

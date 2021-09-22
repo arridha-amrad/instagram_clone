@@ -3,7 +3,6 @@ import { HTTP_CODE } from '../enums/HTTP_CODE';
 import { responseSuccess } from '../ServerResponse';
 import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
-import * as UserDetailsService from '../services/UserDetailsService';
 
 export const me = async (
   req: Request,
@@ -19,17 +18,15 @@ export const me = async (
   }
 };
 
-export const addUserDetails = async (
+export const updateUserData = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await UserDetailsService.findOneAndUpdate(
+    const result = await UserService.findUserByIdAndUpdate(
       req.cookies.COOKIE_ID,
-      {
-        ...req.body,
-      },
+      { ...req.body },
     );
     return responseSuccess(res, HTTP_CODE.OK, result);
   } catch (err) {

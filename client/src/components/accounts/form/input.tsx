@@ -38,7 +38,12 @@ const AccountInput: React.FC<AccountInputProps> = ({
         </InputArea>
       ) : (
         <SimilarAccountWarningArea>
-          <input type="checkbox" name={name} checked={isChecked} />
+          <input
+            onChange={onChange}
+            type="checkbox"
+            name={name}
+            checked={isChecked}
+          />
           {children && children}
         </SimilarAccountWarningArea>
       )}

@@ -11,9 +11,11 @@ export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const REDIRECT_TO_LOGIN = "REDIRECT_TO_LOGIN";
 export const AUTHENTICATED_USER_DATA = "AUTHENTICATED_USER_DATA";
+export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 
 export type AuthActionsType =
   | { type: typeof AUTHENTICATED_USER_DATA; payload: AuthenticatedUserData }
+  | { type: typeof UPDATE_USER_DATA; payload: AuthenticatedUserData }
   | { type: typeof REDIRECT_TO_LOGIN }
   | { type: typeof AUTH_SUCCESS }
   | { type: typeof AUTH_ERROR }

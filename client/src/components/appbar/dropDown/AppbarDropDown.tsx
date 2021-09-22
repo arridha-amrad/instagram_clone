@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/reduxActions/AuthActions";
 import {
   NavbarProfileDropDown,
   ProfileDropDownMenu,
@@ -11,6 +13,7 @@ interface NavDropDownProps {
 }
 
 const NavDropDown: React.FC<NavDropDownProps> = ({ showDropDown }) => {
+  const dispatch = useDispatch();
   return (
     <NavbarProfileDropDown sc_isShow={showDropDown}>
       <ProfileDropDownMenu to="/user/post">
@@ -50,7 +53,9 @@ const NavDropDown: React.FC<NavDropDownProps> = ({ showDropDown }) => {
         <p>Settings</p>
       </ProfileDropDownMenu>
       <DropDownDivider />
-      <NavbarLogoutButton>Log Out</NavbarLogoutButton>
+      <NavbarLogoutButton onClick={() => dispatch(logout())}>
+        Log Out
+      </NavbarLogoutButton>
     </NavbarProfileDropDown>
   );
 };

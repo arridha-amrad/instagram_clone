@@ -6,22 +6,28 @@ export interface IUserModel {
   _id: Schema.Types.ObjectId;
   username: string;
   fullName: string;
-  strategy: AuthenticationStrategy;
   email: string;
-  password: string;
-  requiredAuthAction: RequiredAuthAction;
-  jwtVersion: string;
   role: string;
   birthDay: string;
-  details: Schema.Types.ObjectId;
-  verification: Schema.Types.ObjectId;
-  // optional
+  website: string;
+  bio: string;
+  phoneNumber: string;
+  gender: string;
+  followings: number;
+  followers: number;
+  imageURL: string;
   isActive: boolean;
   isLogin: boolean;
   isVerified: boolean;
   // setup by mongoDB
   createdAt: Date;
   updatedAt: Date;
+
+  // hide from  client
+  requiredAuthAction: RequiredAuthAction;
+  strategy: AuthenticationStrategy;
+  password: string;
+  jwtVersion: string;
 }
 
 const UserSchema = new mongoose.Schema<
@@ -30,6 +36,35 @@ const UserSchema = new mongoose.Schema<
   IUserModel
 >(
   {
+    followers: {
+      type: Number,
+      default: 0,
+    },
+    followings: {
+      type: Number,
+      default: 0,
+    },
+    imageURL: {
+      type: String,
+      default: '',
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'preferNotToSay'],
+      default: 'preferNotToSay',
+    },
+    phoneNumber: {
+      type: String,
+      default: '',
+    },
+    bio: {
+      type: String,
+      default: '',
+    },
+    website: {
+      type: String,
+      default: '',
+    },
     username: {
       type: String,
       required: true,
@@ -81,14 +116,6 @@ const UserSchema = new mongoose.Schema<
     isVerified: {
       type: Boolean,
       default: false,
-    },
-    details: {
-      type: Schema.Types.ObjectId,
-      ref: 'UserDetails',
-    },
-    verification: {
-      type: Schema.Types.ObjectId,
-      ref: 'Verification',
     },
   },
   { timestamps: true },
