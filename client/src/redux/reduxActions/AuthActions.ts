@@ -79,9 +79,13 @@ export const login =
   (loginData: LoginData) => async (dispatch: Dispatch<AuthActionsType>) => {
     dispatchRequiredActions(dispatch);
     try {
-      await axiosInstance.post("/auth/login", loginData);
+      const res = await axiosInstance.post("/auth/login", loginData);
       dispatch({
         type: "LOGIN_SUCCESS",
+      });
+      dispatch({
+        type: "AUTHENTICATED_USER_DATA",
+        payload: res.data,
       });
       localStorage.setItem("data", "login");
     } catch (err: any) {

@@ -14,6 +14,7 @@ router.post(
 );
 router.put('/verify-email', authController.emailVerificationHandler);
 router.get('/refresh-token', authController.refreshTokenHandler);
+router.post('/is-exists', authController.isExists);
 /*
    Protected Routes 
    To access this routes user must include token in cookies

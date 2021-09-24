@@ -1,11 +1,11 @@
 import { Response } from 'express';
-import { ObjectId } from 'mongoose';
+import { AuthenticatedUserData } from './dto/AuthData';
 import { HTTP_CODE } from './enums/HTTP_CODE';
 
 export const responseWithCookie = (
   res: Response,
   encryptedAccessToken: string,
-  userId: ObjectId,
+  user: AuthenticatedUserData,
 ): void => {
   res
     .status(200)
@@ -15,13 +15,13 @@ export const responseWithCookie = (
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     })
-    .cookie(process.env.COOKIE_ID, userId, {
+    .cookie(process.env.COOKIE_ID, user._id, {
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 5,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
     })
-    .send('login');
+    .send(user);
 };
 
 export const responseWithCookieOnly = (

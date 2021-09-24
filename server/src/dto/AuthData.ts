@@ -18,3 +18,21 @@ export type FetchedUserResponse = Pick<
   IUserModel,
   'username' | 'email' | 'createdAt' | 'isLogin'
 >;
+
+export type AuthenticatedUserData = Pick<
+  IUserModel,
+  | '_id'
+  | 'email'
+  | 'bio'
+  | 'followers'
+  | 'followings'
+  | 'fullName'
+  | 'gender'
+  | 'imageURL'
+  | 'isActive'
+  | 'isLogin'
+  | 'phoneNumber'
+  | 'username'
+  | 'website'
+  | 'role'
+>;

@@ -26,7 +26,5 @@ export const findUserByIdAndUpdate = async (
   id: Schema.Types.ObjectId | string,
   update: Partial<IUserModel>,
 ): Promise<IUserModel | null> => {
-  return UserModel.findByIdAndUpdate(id, { ...update }, { new: true }).select(
-    '-password -requiredAuthAction -jwtVersion -strategy',
-  );
+  return UserModel.findByIdAndUpdate(id, { ...update }, { new: true });
 };

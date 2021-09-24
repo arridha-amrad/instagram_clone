@@ -4,6 +4,7 @@ import { responseSuccess } from '../ServerResponse';
 import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
 import argon2 from 'argon2';
+import { authenticatedUserDataMapper } from '../utils/mapper';
 
 export const me = async (
   req: Request,
@@ -11,8 +12,11 @@ export const me = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const data = await UserService.findUserById(req.userId);
-    return responseSuccess(res, HTTP_CODE.OK, data);
+    const user = await UserService.findUserById(req.userId);
+    if (user) {
+      const data = authenticatedUserDataMapper(user);
+      return responseSuccess(res, HTTP_CODE.OK, data);
+    }
   } catch (err) {
     console.log(err);
     next(new ServerErrorException());
@@ -25,11 +29,14 @@ export const updateUserData = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await UserService.findUserByIdAndUpdate(
+    const updateResult = await UserService.findUserByIdAndUpdate(
       req.cookies.COOKIE_ID,
       { ...req.body },
     );
-    return responseSuccess(res, HTTP_CODE.OK, result);
+    if (updateResult) {
+      const data = authenticatedUserDataMapper(updateResult);
+      return responseSuccess(res, HTTP_CODE.OK, data);
+    }
   } catch (err) {
     console.log(err);
     next(new ServerErrorException());

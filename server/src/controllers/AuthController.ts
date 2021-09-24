@@ -30,6 +30,25 @@ import { LoginRequest, RegisterRequest } from '../dto/AuthData';
 import { generateNumber } from '../utils/RandomNumberGenerator';
 import * as VerificationServices from '../services/VerificationService';
 import { IVerificationModel } from '../models/VerificationModel';
+import { authenticatedUserDataMapper } from '../utils/mapper';
+
+export const isExists = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const result = await UserServices.findUserByUsernameOrEmail(req.body.data);
+    if (result) {
+      res.status(200).send('not-available');
+    } else {
+      res.status(200).send('ok');
+    }
+  } catch (error) {
+    console.log('err', error);
+    next(new ServerErrorException());
+  }
+};
 
 export const registerHandler = async (
   req: Request,
@@ -156,7 +175,8 @@ export const loginHandler = async (
       const encryptedRefreshToken = encrypt(refreshToken);
       // store refreshToken to redis
       await redis.set(`${user._id}_refToken`, encryptedRefreshToken);
-      return responseWithCookie(res, encryptedAccessToken, user._id);
+      const data = authenticatedUserDataMapper(user);
+      return responseWithCookie(res, encryptedAccessToken, data);
     }
   } catch (err) {
     console.log(err);
