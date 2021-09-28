@@ -1,10 +1,10 @@
 interface IToken {
-   email: string;
-   userId: string;
-   iat: number;
-   exp: number;
-   iss: string;
-   jwtVersion: string;
+  email: string;
+  userId: string;
+  iat: number;
+  exp: number;
+  iss: string;
+  jwtVersion: string;
 }
 
 export type LinkPayloadType = Omit<IToken, 'userId' | 'jwtVersion'>;

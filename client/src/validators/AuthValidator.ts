@@ -33,38 +33,6 @@ export const regexpFullName =
 
 export type FieldsError<T> = Partial<Record<keyof T, string>>;
 
-export const RegisterValidator = (
-  options: RegisterData
-): IValidatorResult<RegisterData> => {
-  const { username, email, password } = options;
-  const errors: FieldsError<RegisterData> = {};
-  if (username.length < 6) {
-    errors.username = "username requires 6 characters or more";
-  } else {
-    delete errors.username;
-  }
-  if (!email.match(regexpEmail)) {
-    errors.email = "Please input your valid email";
-  } else {
-    delete errors.email;
-  }
-  if (!password) {
-    errors.password = "password is required";
-  } else {
-    delete errors.password;
-  }
-  // if (!password.match(regExp_password)) {
-  //   errors.password =
-  //     "password require at least 6 characters with combination uppercase, letter, and number";
-  // } else {
-  //   delete errors.password;
-  // }
-  return {
-    errors,
-    valid: Object.keys(errors).length < 1,
-  };
-};
-
 export const LoginValidator = (
   options: LoginData
 ): IValidatorResult<LoginData> => {

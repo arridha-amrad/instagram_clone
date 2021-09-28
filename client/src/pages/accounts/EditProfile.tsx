@@ -52,7 +52,6 @@ const EditProfile: React.FC<EditProfileProps> = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(states);
     dispatch(updateUserData(states));
   };
 
@@ -127,7 +126,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
       </form>
 
       {messages.map((message) => (
-        <MyAlert message={message.text} type={message.type} />
+        <MyAlert key={message.id} message={message.text} type={message.type} />
       ))}
     </AccountContainer>
   );

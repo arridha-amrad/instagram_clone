@@ -1,31 +1,39 @@
-import { AnyAction } from "redux";
 import { UserData } from "../../dto/AuthDTO";
-import * as types from "../reduxTypes/UserTypes";
+import { UserActionsType } from "../reduxTypes/UserTypes";
 
-export type UserState = Partial<UserData> & { loadingUser: boolean };
+// export type UserState = Partial<UserData> & { loadingUser: boolean };
+
+export interface UserState {
+  loadingUser: boolean;
+  user?: UserData;
+}
 
 const initialState: UserState = {
   loadingUser: false,
+  user: undefined,
 };
 
-const UserReducer = (state = initialState, action: AnyAction): UserState => {
+const UserReducer = (
+  state = initialState,
+  action: UserActionsType
+): UserState => {
   switch (action.type) {
-    case types.LOADING_USER:
+    case "LOADING_USER":
       return {
         ...state,
         loadingUser: true,
       };
-    case types.STOP_LOADING:
+    case "STOP_LOADING_USER":
       return {
         ...state,
         loadingUser: false,
       };
-    case types.SET_USER_SUCCESS:
+    case "SET_USER_SUCCESS":
       return {
         ...state,
-        ...action.payload,
+        user: { ...action.payload },
       };
-    case types.RESET_USER:
+    case "RESET_USER":
       return {
         ...state,
         ...initialState,

@@ -13,6 +13,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("err status : ", error.response.status);
     Promise.reject(error);
   }
 );
@@ -22,14 +23,16 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: any) => {
-    if (error.response.data.message === "jwt expired") {
+    if (error.response.status === 401) {
       return axiosInstance
         .get(`${baseURL}/auth/refresh-token`)
         .then(() => {
+          console.log("cookie renewed");
           return axios(error.config);
         })
         .catch((err) => {
-          console.log(err.response.data);
+          console.log("err from interceptor : ", err.response.data);
+          return Promise.reject(err);
         });
     }
     return Promise.reject(error);

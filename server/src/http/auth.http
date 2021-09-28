@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
   "identity": "amrad08",
-  "password": "Iambillionaire99"
+  "password": "ariGanteng08"
 }
 
 ### Logout
@@ -68,7 +68,7 @@ POST http://localhost:5000/api/user/change-password
 Content-Type: application/json
 
 {
-  "oldPassword": "123456",
+  "oldPassword": "Iambillionaire99",
   "newPassword": "ariGanteng08"
 }
 

@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch } from "redux";
 import * as uuid from "uuid";
 
 export const SET_MESSAGE = "SET_MESSAGE";

@@ -6,19 +6,19 @@ export const authenticatedUserDataMapper = (
 ): AuthenticatedUserData => {
   const data: AuthenticatedUserData = {
     _id: user._id,
-    bio: user.bio,
+    username: user.username,
     email: user.email,
+    fullName: user.fullName,
     followers: user.followers,
     followings: user.followings,
-    fullName: user.fullName,
+    website: user.website,
+    bio: user.bio,
+    phoneNumber: user.phoneNumber,
+    role: user.role,
     gender: user.gender,
     imageURL: user.imageURL,
     isActive: user.isActive,
     isLogin: user.isLogin,
-    phoneNumber: user.phoneNumber,
-    role: user.role,
-    username: user.username,
-    website: user.website,
   };
   return data;
 };

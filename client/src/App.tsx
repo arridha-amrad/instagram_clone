@@ -62,9 +62,7 @@ const App: React.FC<AppProps> = () => {
           dispatch({ type: SET_UNAUTHENTICATED });
         })
         .finally(() => {
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
+          setLoading(false);
         });
     }
     // eslint-disable-next-line

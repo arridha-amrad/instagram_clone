@@ -68,7 +68,6 @@ export const registerHandler = async (
       strategy: AuthenticationStrategy.default,
       requiredAuthAction: RequiredAuthAction.emailVerification,
     });
-
     // Create a unique verification code
     // if the code already exists, looping run -> generate new code & check if it is exists
     let verificationCode: string;

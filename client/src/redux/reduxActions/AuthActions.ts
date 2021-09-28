@@ -9,7 +9,7 @@ import {
   VerifyEmailData,
 } from "../../dto/AuthDTO";
 import * as messageActions from "../reduxReducers/MessageReducer";
-import { Dispatch as ReactDispatch } from "react";
+// import { Dispatch as ReactDispatch } from "react";
 
 const dispatchRequiredActions = (dispatch: Dispatch<AuthActionsType>) => {
   dispatch({ type: "RESET_REQUEST_STATUS" });
@@ -17,7 +17,7 @@ const dispatchRequiredActions = (dispatch: Dispatch<AuthActionsType>) => {
 };
 
 const dispatchMessage = (
-  dispatch: ReactDispatch<any>,
+  dispatch: Dispatch<any>,
   message: string,
   type: messageActions.MessageTypes
 ) => {

@@ -5,6 +5,7 @@ import ServerErrorException from '../exceptions/ServerErrorException';
 import * as UserService from '../services/UserService';
 import argon2 from 'argon2';
 import { authenticatedUserDataMapper } from '../utils/mapper';
+import Exception from '../exceptions/Exception';
 
 export const me = async (
   req: Request,
@@ -62,6 +63,8 @@ export const changePassword = async (
         if (result) {
           return responseSuccess(res, HTTP_CODE.OK, 'password changed');
         }
+      } else {
+        return next(new Exception(HTTP_CODE.BAD_REQUEST, 'wrong password'));
       }
     }
   } catch (err) {
