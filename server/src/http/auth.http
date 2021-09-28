@@ -78,7 +78,6 @@ GET http://localhost:5000/api/user/me
 
 
 ### Add User details
-
 POST http://localhost:5000/api/user/update-user-data
 Content-Type: application/json
 
@@ -90,8 +89,5 @@ Content-Type: application/json
 }
 
 
-###
-POST http://localhost:5000/api/test/set
-
-###
-GET http://localhost:5000/api/test/get
+### FIND USER BY USERNAME
+GET http://localhost:5000/api/user/amrad.marks21

@@ -11,13 +11,13 @@ import {
   NavSearch,
   NavSearchArea,
   NavTitle,
-} from "./appbar.elements";
+} from "./appBar.elements";
 import IGText from "../../images/ig2.svg";
 import { NavContainer } from "../../styled-components/container-el";
 import SearchResult from "./searchResult/SearchResult";
-import NavDropDown from "./dropDown/AppbarDropDown";
+import NavDropDown from "./dropDown/AppBarDropDown";
 
-interface AppBarProps { }
+interface AppBarProps {}
 
 const AppBar: React.FC<AppBarProps> = () => {
   const [search, setSearch] = useState("");

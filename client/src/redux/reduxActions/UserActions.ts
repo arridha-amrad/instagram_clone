@@ -14,25 +14,29 @@ const dispatchMessage = (
 
 export const changePassword =
   (data: ChangePasswordData) => async (dispatch: Dispatch<UserActionsType>) => {
-    // dispatch({ type: "LOADING_USER" });
-    return axiosInstance
-      .post("/user/change-password", data)
-      .then((res) => {
-        dispatchMessage(dispatch, res.data, "success");
-      })
-      .catch((err: any) => {
-        // console.log("err from actions : ", err);
-        dispatchMessage(dispatch, err.response.data.message, "danger");
-      });
+    dispatch({ type: "LOADING_USER" });
+    try {
+      const result = await axiosInstance.post("/user/change-password", data);
+      dispatchMessage(dispatch, result.data, "success");
+    } catch (err: any) {
+      dispatchMessage(dispatch, err.response.data.message, "danger");
+    } finally {
+      dispatch({ type: "STOP_LOADING_USER" });
+    }
+  };
 
-    // try {
-    //   const res = await axiosInstance.post("/user/change-password", data);
-    //   if (res) {
-    //     dispatchMessage(dispatch, res.data, "success");
-    //     dispatch({ type: "STOP_LOADING_USER" });
-    //   }
-    // } catch (err: any) {
-    //   console.log("user actions err : ", err.response.data.message);
-    //   dispatchMessage(dispatch, err.response.data.message, "danger");
-    // }
+export const findUserAndPostsByUsername =
+  (username: string) => async (dispatch: Dispatch<UserActionsType>) => {
+    dispatch({ type: "LOADING_USER" });
+    try {
+      const result = await axiosInstance.get(`/user${username}`);
+      dispatch({
+        type: "SET_USER_SUCCESS",
+        payload: result.data,
+      });
+    } catch (err: any) {
+      console.log(err.response.data);
+    } finally {
+      dispatch({ type: "STOP_LOADING_USER" });
+    }
   };

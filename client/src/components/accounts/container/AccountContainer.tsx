@@ -1,7 +1,7 @@
 import React from "react";
 import { MyContainer } from "../../../styled-components/container-el";
 import { VSpacer } from "../../../styled-components/spacer-el";
-import AppBar from "../../appbar/Appbar";
+import AppBar from "../../appBar/AppBar";
 import UserFooter from "../../user/footer/UserFooter";
 import AccountMenu from "../menu/AccountMenu";
 import {

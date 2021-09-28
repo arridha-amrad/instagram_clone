@@ -1,5 +1,5 @@
 import React from "react";
-import AppBar from "../components/appbar/Appbar";
+import AppBar from "../components/appBar/AppBar";
 import HomeProfile from "../components/home/profile/HomeProfile";
 import HomeFooter from "../components/home/footer/HomeFooter";
 import SuggestionUser from "../components/home/suggestedUsers/SuggestedUsers";

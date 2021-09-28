@@ -13,8 +13,11 @@ interface EditProfileProps {}
 
 const EditProfile: React.FC<EditProfileProps> = () => {
   document.title = "Edit Profile - Instagram";
+
   const user = useSelector((state: RootState) => state.auth.authenticatedUser);
+
   const { messages } = useSelector((state: RootState) => state.message);
+
   const dispatch = useDispatch();
 
   const [states, setStates] = useState<Partial<AuthenticatedUserData>>({
@@ -120,7 +123,11 @@ const EditProfile: React.FC<EditProfileProps> = () => {
           label="Gender"
           name="gender"
         />
-        <AccountButton text="Submit" btnSize="small">
+        <AccountButton
+          isDisabled={username?.trim() === "" || email?.trim() === ""}
+          text="Submit"
+          btnSize="small"
+        >
           <p>Temporarily disable my account</p>
         </AccountButton>
       </form>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface AccountInputProps {
   inputSize?: "big" | "small";
+  error?: string;
   label: string;
   name: string;
   type?: string;
@@ -10,6 +11,8 @@ interface AccountInputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   value?: string;
   isChecked?: boolean;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  onKeyUp?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 const AccountInput: React.FC<AccountInputProps> = ({
@@ -21,7 +24,10 @@ const AccountInput: React.FC<AccountInputProps> = ({
   isInputArea = true,
   onChange = undefined,
   value,
+  error = undefined,
   isChecked = false,
+  onBlur = undefined,
+  onKeyUp = undefined,
 }) => {
   return (
     <FormGroup aa_bigInput={inputSize === "big" ? true : false}>
@@ -32,9 +38,17 @@ const AccountInput: React.FC<AccountInputProps> = ({
           {name === "bio" ? (
             <textarea name="bio" value={value} onChange={onChange} />
           ) : (
-            <input name={name} type={type} onChange={onChange} value={value} />
+            <input
+              onKeyUp={onKeyUp}
+              onBlur={onBlur}
+              name={name}
+              type={type}
+              onChange={onChange}
+              value={value}
+            />
           )}
           {children && children}
+          {error && <ErrorText>{error}</ErrorText>}
         </InputArea>
       ) : (
         <SimilarAccountWarningArea>
@@ -52,6 +66,10 @@ const AccountInput: React.FC<AccountInputProps> = ({
 };
 
 export default AccountInput;
+
+const ErrorText = styled.p`
+  color: red !important;
+`;
 
 interface FormGroupProps {
   aa_bigInput?: boolean;

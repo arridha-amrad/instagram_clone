@@ -19,10 +19,13 @@ import {
 import { ModalBackground2 } from "../modal/settings/settingsModal.element";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
+import { ProfilePageData } from "../../../dto/UserDTO";
 
-interface ProfileDataProps {}
+interface ProfileDataProps {
+  data: ProfilePageData;
+}
 
-const ProfileData: React.FC<ProfileDataProps> = () => {
+const ProfileData: React.FC<ProfileDataProps> = ({ data }) => {
   const [isShow, setShow] = useState(false);
   const myRef = useRef();
 
@@ -55,33 +58,39 @@ const ProfileData: React.FC<ProfileDataProps> = () => {
       </ModalBackground2>
 
       <ProfileFirstLine>
-        <ProfileUsername>{authenticatedUser?.username}</ProfileUsername>
-        <EditProfileButton to="/accounts/edit">Edit Profile</EditProfileButton>
-        <SettingsIcon
-          onClick={() => setShow(true)}
-          className="item"
-          src={Setting}
-        />
+        <ProfileUsername>{data.username}</ProfileUsername>
+        {data.isAuthenticatedUser && (
+          <>
+            <EditProfileButton to="/accounts/edit">
+              Edit Profile
+            </EditProfileButton>
+            <SettingsIcon
+              onClick={() => setShow(true)}
+              className="item"
+              src={Setting}
+            />
+          </>
+        )}
       </ProfileFirstLine>
 
       <EditProfileButton2 to="/accounts/edit">Edit Profile</EditProfileButton2>
 
       <PostFollowersFollowingsArea>
         <Post>
-          <span>10</span> post
+          <span>{data.totalPosts}</span> post
         </Post>
         <Followers>
-          <span>{authenticatedUser?.followers}</span> followers
+          <span>{data.totalFollowers}</span> followers
         </Followers>
         <Followings>
-          <span>{authenticatedUser?.followings}</span> followings
+          <span>{data.totalFollowings}</span> followings
         </Followings>
       </PostFollowersFollowingsArea>
 
       <AccountDetails>
-        <AccountName>{authenticatedUser?.fullName}</AccountName>
-        <Bio>{authenticatedUser?.bio}</Bio>
-        <Web>{authenticatedUser?.website}</Web>
+        <AccountName>{data.fullName}</AccountName>
+        <Bio>{data.bio}</Bio>
+        <Web>{data.website}</Web>
       </AccountDetails>
     </>
   );

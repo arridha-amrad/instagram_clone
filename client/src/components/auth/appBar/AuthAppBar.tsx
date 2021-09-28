@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, NavContainer } from "../../appbar/appbar.elements";
+import { Nav, NavContainer } from "../../appBar/appBar.elements";
 import IGText from "../../../images/ig2.svg";
 import { Link } from "react-router-dom";
 

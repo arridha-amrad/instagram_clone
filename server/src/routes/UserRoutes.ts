@@ -18,4 +18,6 @@ router.post(
   userController.changePassword,
 );
 
+router.get('/:username', userController.findUserByUsername);
+
 export default router;

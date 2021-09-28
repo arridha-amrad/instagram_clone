@@ -1,5 +1,5 @@
-import React from "react";
-import AppBar from "../../appbar/Appbar";
+import React, { useEffect, useState } from "react";
+import AppBar from "../../appBar/AppBar";
 import AccountData from "../details/UserDetails";
 import ProfileMenus from "../menu/Menu";
 import { SpacerFromNavbarProfile } from "../../../styled-components/spacer-el";
@@ -8,11 +8,61 @@ import UserFooter from "../footer/UserFooter";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/Store";
+import { useLocation } from "react-router";
+import { useDispatch } from "react-redux";
+import { findUserAndPostsByUsername } from "../../../redux/reduxActions/UserActions";
+import { ProfilePageData } from "../../../dto/UserDTO";
 
 interface UserContainerProps {}
 
 const UserContainer: React.FC<UserContainerProps> = ({ children }) => {
+  const [data, setData] = useState<ProfilePageData>({
+    bio: "",
+    username: "",
+    isAuthenticatedUser: false,
+    totalPosts: 0,
+    totalFollowers: 0,
+    totalFollowings: 0,
+    fullName: "",
+    website: "",
+    imageURL: "",
+  });
+
   const { authenticatedUser } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.user);
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (location.pathname.split("/")[1] !== authenticatedUser?.username) {
+      dispatch(findUserAndPostsByUsername(location.pathname));
+      setData({
+        ...data,
+        bio: user?.bio ?? "",
+        username: user?.username ?? "",
+        fullName: user?.fullName ?? "",
+        isAuthenticatedUser: false,
+        totalFollowers: user?.followers ?? 0,
+        totalFollowings: user?.followings ?? 0,
+        totalPosts: 0,
+        website: user?.website ?? "",
+      });
+    } else {
+      setData({
+        ...data,
+        bio: authenticatedUser.bio,
+        username: authenticatedUser.username,
+        fullName: authenticatedUser.fullName,
+        isAuthenticatedUser: true,
+        totalFollowers: authenticatedUser.followers,
+        totalFollowings: authenticatedUser.followings,
+        website: authenticatedUser.website,
+        totalPosts: 0,
+      });
+    }
+    // eslint-disable-next-line
+  }, []);
   return (
     <>
       <AppBar />
@@ -24,34 +74,32 @@ const UserContainer: React.FC<UserContainerProps> = ({ children }) => {
               <AccountAvatar src="https://deadline.com/wp-content/uploads/2016/05/spongebob.jpg?w=600&h=383&crop=1" />
             </AvatarWrapper>
             <AccountDataWrapper>
-              <AccountData />
+              <AccountData data={data} />
             </AccountDataWrapper>
           </AccountWrapper>
 
+          {/* This line appears for min-width 736px */}
           <AccountWrapper2>
-            <Name>Spongebob</Name>
-            <Bio>
-              A yellow sea sponge named SpongeBob SquarePants.
-              <br /> He embarks on various adventures with his friends at Bikini
-              Bottom.
-            </Bio>
-            <Web>www.mrsquare.com</Web>
+            <Name>{data.fullName}</Name>
+            <Bio>{data.bio}</Bio>
+            <Web>{data.website}</Web>
           </AccountWrapper2>
 
           <PostFollowerFollowingArea2>
             <PostFoll2>
-              <Total2>1000</Total2>
-              <Menu2>Post</Menu2>
+              <Total2>{data.totalPosts}</Total2>
+              <Menu2>Posts</Menu2>
             </PostFoll2>
             <PostFoll2>
-              <Total2>1000</Total2>
-              <Menu2>Follwers</Menu2>
+              <Total2>{data.totalFollowers}</Total2>
+              <Menu2>Followers</Menu2>
             </PostFoll2>
             <PostFoll2>
-              <Total2>1000</Total2>
+              <Total2>{data.totalFollowings}</Total2>
               <Menu2>Followings</Menu2>
             </PostFoll2>
           </PostFollowerFollowingArea2>
+          {/* This line appears for min-width 736px */}
         </AccountHeader>
 
         <HorizontalLine />

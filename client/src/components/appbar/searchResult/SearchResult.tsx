@@ -8,7 +8,7 @@ import {
   AvatarWrapper,
 } from "./SearchResult.elements";
 
-interface SearchResultProps { }
+interface SearchResultProps {}
 
 const SearchResult: React.FC<SearchResultProps> = () => {
   return (

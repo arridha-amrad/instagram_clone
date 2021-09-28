@@ -7,6 +7,26 @@ import argon2 from 'argon2';
 import { authenticatedUserDataMapper } from '../utils/mapper';
 import Exception from '../exceptions/Exception';
 
+export const findUserByUsername = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    console.log('username : ', req.params.username);
+    const user = await UserService.findUserAndPostsByUsername(
+      req.params.username,
+    );
+    if (user) {
+      const data = authenticatedUserDataMapper(user);
+      return responseSuccess(res, HTTP_CODE.OK, { ...data });
+    }
+  } catch (err) {
+    console.log(err);
+    next(new ServerErrorException());
+  }
+};
+
 export const me = async (
   req: Request,
   res: Response,
