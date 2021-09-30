@@ -66,6 +66,8 @@ const App: React.FC<AppProps> = () => {
             setLoading(false);
           }, 2000);
         });
+    } else {
+      setLoading(false);
     }
     // eslint-disable-next-line
   }, []);

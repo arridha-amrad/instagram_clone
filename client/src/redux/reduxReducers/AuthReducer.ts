@@ -6,7 +6,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   isRedirectToLoginPage: boolean;
   requestStatus?: boolean;
-  authenticatedUser?: AuthenticatedUserData;
+  authenticatedUser: AuthenticatedUserData;
 }
 
 const initialState: AuthState = {
@@ -14,7 +14,26 @@ const initialState: AuthState = {
   isAuthenticated: false,
   requestStatus: undefined,
   isRedirectToLoginPage: false,
-  authenticatedUser: undefined,
+  authenticatedUser: {
+    _id: "",
+    bio: "",
+    birthDay: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    email: "",
+    followers: 0,
+    followings: 0,
+    fullName: "",
+    gender: "",
+    imageURL: "",
+    isActive: false,
+    isLogin: false,
+    isVerified: false,
+    phoneNumber: "",
+    role: "",
+    username: "",
+    website: "",
+  },
 };
 
 const AuthReducer = (

@@ -5,12 +5,24 @@ import { UserActionsType } from "../reduxTypes/UserTypes";
 
 export interface UserState {
   loadingUser: boolean;
-  user?: UserData;
+  user: UserData;
 }
 
 const initialState: UserState = {
   loadingUser: false,
-  user: undefined,
+  user: {
+    _id: "",
+    bio: "",
+    createdAt: new Date(),
+    email: "",
+    followers: 0,
+    followings: 0,
+    fullName: "",
+    imageURL: "",
+    updatedAt: new Date(),
+    username: "",
+    website: "",
+  },
 };
 
 const UserReducer = (

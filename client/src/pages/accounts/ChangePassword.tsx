@@ -7,8 +7,9 @@ import AccountLink from "../../components/accounts/form/link";
 import AccountProfile from "../../components/accounts/profile/AccountProfile";
 import MyAlert from "../../components/alert/MyAlert";
 import { ChangePasswordData } from "../../dto/UserDTO";
-import { changePassword } from "../../redux/reduxActions/UserActions";
-import { RootState } from "../../redux/Store";
+import { changePassword, testFx } from "../../redux/reduxActions/UserActions";
+import { CLEAR_MESSAGE } from "../../redux/reduxReducers/MessageReducer";
+import store, { RootState } from "../../redux/Store";
 import { regExpPassword } from "../../validators/AuthValidator";
 
 interface ChangePasswordProps {}
@@ -46,7 +47,14 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(changePassword({ newPassword, oldPassword }));
+    if (newPassword !== confirmedPassword) {
+      setError({
+        ...errors,
+        confirmedPassword: "password not match",
+      });
+    } else {
+      dispatch(changePassword({ newPassword, oldPassword }));
+    }
   };
 
   const validatingOldPassword = () => {
@@ -103,6 +111,15 @@ const ChangePassword: React.FC<ChangePasswordProps> = () => {
         })
     );
   }, [messages]);
+
+  useEffect(() => {
+    const res = dispatch(testFx());
+    res(dispatch).then((res) => {
+      console.log("res : ", res);
+    });
+
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <AccountContainer>

@@ -57,5 +57,23 @@ export type AuthenticatedUserData = Omit<
 
 export type UserData = Omit<
   AuthenticatedUserData,
-  "phoneNumber" | "isActive" | "isLogin" | "isVerified" | "gender" | "id"
+  | "phoneNumber"
+  | "isActive"
+  | "isLogin"
+  | "isVerified"
+  | "gender"
+  | "id"
+  | "birthDay"
+  | "role"
+>;
+
+export type EditProfileData = Pick<
+  AuthenticatedUserData,
+  | "email"
+  | "username"
+  | "fullName"
+  | "website"
+  | "bio"
+  | "phoneNumber"
+  | "gender"
 >;

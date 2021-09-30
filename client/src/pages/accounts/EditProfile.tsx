@@ -5,7 +5,7 @@ import AccountButton from "../../components/accounts/form/button";
 import AccountInput from "../../components/accounts/form/input";
 import AccountProfile from "../../components/accounts/profile/AccountProfile";
 import MyAlert from "../../components/alert/MyAlert";
-import { AuthenticatedUserData } from "../../dto/AuthDTO";
+import { EditProfileData } from "../../dto/AuthDTO";
 import { updateUserData } from "../../redux/reduxActions/AuthActions";
 import { RootState } from "../../redux/Store";
 
@@ -14,13 +14,18 @@ interface EditProfileProps {}
 const EditProfile: React.FC<EditProfileProps> = () => {
   document.title = "Edit Profile - Instagram";
 
+  const [errors, setError] = useState({
+    email: "",
+    username: "",
+  });
+
   const user = useSelector((state: RootState) => state.auth.authenticatedUser);
 
   const { messages } = useSelector((state: RootState) => state.message);
 
   const dispatch = useDispatch();
 
-  const [states, setStates] = useState<Partial<AuthenticatedUserData>>({
+  const [states, setStates] = useState<EditProfileData>({
     email: "",
     username: "",
     fullName: "",
@@ -33,13 +38,13 @@ const EditProfile: React.FC<EditProfileProps> = () => {
   useEffect(() => {
     setStates({
       ...states,
-      email: user?.email,
-      username: user?.username,
-      fullName: user?.fullName,
-      website: user?.website,
-      bio: user?.bio,
-      phoneNumber: user?.phoneNumber,
-      gender: user?.gender,
+      email: user.email,
+      username: user.username,
+      fullName: user.fullName,
+      website: user.website,
+      bio: user.bio,
+      phoneNumber: user.phoneNumber,
+      gender: user.gender,
     });
     // eslint-disable-next-line
   }, []);
@@ -71,7 +76,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
       <form onSubmit={handleSubmit}>
         <AccountInput
           onChange={handleChange}
-          value={fullName ?? ""}
+          value={fullName}
           label="Name"
           name="fullName"
         >
@@ -83,19 +88,19 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         </AccountInput>
         <AccountInput
           onChange={handleChange}
-          value={username ?? ""}
+          value={username}
           label="Username"
           name="username"
         />
         <AccountInput
           onChange={handleChange}
-          value={website ?? ""}
+          value={website}
           label="Website"
           name="website"
         />
         <AccountInput
           onChange={handleChange}
-          value={bio ?? ""}
+          value={bio}
           label="Bio"
           name="bio"
         >
@@ -107,19 +112,19 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         </AccountInput>
         <AccountInput
           onChange={handleChange}
-          value={email ?? ""}
+          value={email}
           label="Email"
           name="email"
         />
         <AccountInput
           onChange={handleChange}
-          value={phoneNumber ?? ""}
+          value={phoneNumber}
           label="Phone Number"
           name="phoneNumber"
         />
         <AccountInput
           onChange={handleChange}
-          value={gender ?? ""}
+          value={gender}
           label="Gender"
           name="gender"
         />

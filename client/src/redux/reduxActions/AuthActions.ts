@@ -11,9 +11,12 @@ import {
 import * as messageActions from "../reduxReducers/MessageReducer";
 // import { Dispatch as ReactDispatch } from "react";
 
-const dispatchRequiredActions = (dispatch: Dispatch<AuthActionsType>) => {
+type AuthMessageAction = AuthActionsType | messageActions.MessageActionsType;
+
+const dispatchRequiredActions = (dispatch: Dispatch<AuthMessageAction>) => {
   dispatch({ type: "RESET_REQUEST_STATUS" });
   dispatch({ type: "LOADING_AUTH" });
+  dispatch({ type: "RESET_MESSAGE" });
 };
 
 const dispatchMessage = (
@@ -26,7 +29,7 @@ const dispatchMessage = (
 
 export const updateUserData =
   (data: Partial<AuthenticatedUserData>) =>
-  async (dispatch: Dispatch<AuthActionsType>) => {
+  async (dispatch: Dispatch<AuthMessageAction>) => {
     dispatchRequiredActions(dispatch);
     try {
       const result = await axiosInstance.post("/user/update-user-data", data);
@@ -51,7 +54,7 @@ export const getLoginUserData =
   };
 
 export const verifyEmail =
-  (data: VerifyEmailData) => async (dispatch: Dispatch<AuthActionsType>) => {
+  (data: VerifyEmailData) => async (dispatch: Dispatch<AuthMessageAction>) => {
     dispatchRequiredActions(dispatch);
     try {
       await axiosInstance.put("/auth/verify-email", data);
@@ -64,7 +67,7 @@ export const verifyEmail =
     }
   };
 
-export const logout = () => async (dispatch: Dispatch<AuthActionsType>) => {
+export const logout = () => async (dispatch: Dispatch<AuthMessageAction>) => {
   dispatchRequiredActions(dispatch);
   try {
     await axiosInstance.post("/auth/logout");
@@ -76,7 +79,7 @@ export const logout = () => async (dispatch: Dispatch<AuthActionsType>) => {
 };
 
 export const login =
-  (loginData: LoginData) => async (dispatch: Dispatch<AuthActionsType>) => {
+  (loginData: LoginData) => async (dispatch: Dispatch<AuthMessageAction>) => {
     dispatchRequiredActions(dispatch);
     try {
       const res = await axiosInstance.post("/auth/login", loginData);
@@ -98,7 +101,7 @@ export const login =
 
 export const forgotPassword =
   (formData: ForgotPasswordData) =>
-  async (dispatch: Dispatch<AuthActionsType>): Promise<void> => {
+  async (dispatch: Dispatch<AuthMessageAction>) => {
     dispatchRequiredActions(dispatch);
     try {
       const res = await axiosInstance.post("/auth/forgot-password", formData);
@@ -116,7 +119,7 @@ export const forgotPassword =
 
 export const resetPassword =
   (formData: ResetPasswordData) =>
-  async (dispatch: Dispatch<AuthActionsType>) => {
+  async (dispatch: Dispatch<AuthMessageAction>) => {
     dispatchRequiredActions(dispatch);
     try {
       const res = await axiosInstance.post(
